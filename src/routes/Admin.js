@@ -12,6 +12,9 @@ Admin.get('/users', TokenMid.checkToken, UserControl.read)
 Admin.get('/agent', TokenMid.checkToken, AdminControl.readAgent)
 Admin.get('/bus', TokenMid.checkToken, AdminControl.readBus)
 Admin.get('/user-detail', TokenMid.checkToken, AdminControl.readUserDetail)
+Admin.get('/route', TokenMid.checkToken, AdminControl.readRoutes)
+Admin.get('/schedule', TokenMid.checkToken, AdminControl.readSchedules)
+Admin.get('/transaction', TokenMid.checkToken, AdminControl.readTransaction)
 
 // create
 Admin.post('/agent/add', TokenMid.checkToken, AdminControl.createAgent)

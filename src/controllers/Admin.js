@@ -3,10 +3,13 @@ const UserModel = require('../models/Users')
 const AdminModel = require('../models/Admin')
 const AgentModel = require('../models/Agent')
 const BussModel = require('../models/Bus')
+const RouteModel = require('../models/Route')
+const ScheduleModel = require('../models/Schedule')
+const TransactionModel = require ('../models/Transaction')
 
 // package
 const bcrypt = require('bcryptjs')
-const uuid = require('uuid').v4
+// const uuid = require('uuid').v4
 
 module.exports = {
   createAdmin: async function (req, res) {
@@ -151,5 +154,105 @@ module.exports = {
       pageInfo: conditions
     }
     res.send(data)
+  },
+  readRoutes: async function (req, res) {
+    let { page, limit, search, sort } = req.query
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 5
+
+    let key = search && Object.keys(search)[0]
+    let value = search && Object.values(search)[0]
+    search = (search && { key, value }) || { key: 'id', value: '' }
+
+    key = sort && Object.keys(sort)[0]
+    value = sort && Object.values(sort)[0]
+    search = (sort && { key, value }) || { key: 'id', value: '' }
+    const conditions = { page, perPage: limit, search, sort }
+    if (req.user.roleId !== 1) {
+      const data = {
+        success: false,
+        msg: 'You\'re not allowed to access this feature'
+      }
+      res.send(data)
+    }
+    const results = await RouteModel.getAllRoutes(conditions)
+    conditions.totalData = await RouteModel.getTotalRoutes(conditions)
+    conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
+    delete conditions.search
+    delete conditions.sort
+    delete conditions.limit
+    const data = {
+      success: true,
+      data: results,
+      pageInfo: conditions
+    }
+    res.send(data)
+  },
+  readSchedules: async function (req, res) {
+    let { page, limit, search, sort } = req.query
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 5
+
+    let key = search && Object.keys(search)[0]
+    let value = search && Object.values(search)[0]
+    search = (search && { key, value }) || { key: 'id', value: '' }
+
+    key = sort && Object.keys(sort)[0]
+    value = sort && Object.values(sort)[0]
+    search = (sort && { key, value }) || { key: 'id', value: '' }
+    const conditions = { page, perPage: limit, search, sort }
+    if (req.user.roleId !== 1) {
+      const data = {
+        success: false,
+        msg: 'You\'re not allowed to access this feature'
+      }
+      res.send(data)
+    }
+    const results = await ScheduleModel.getAllSchedules(conditions)
+    conditions.totalData = await ScheduleModel.getTotalSchedules(conditions)
+    conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
+    delete conditions.search
+    delete conditions.sort
+    delete conditions.limit
+    const data = {
+      success: true,
+      data: results,
+      pageInfo: conditions
+    }
+    res.send(data)
+  },
+  readTransaction: async function (req, res) {
+    let { page, limit, search, sort } = req.query
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 5
+
+    let key = search && Object.keys(search)[0]
+    let value = search && Object.values(search)[0]
+    search = (search && { key, value }) || { key: 'id', value: '' }
+
+    key = sort && Object.keys(sort)[0]
+    value = sort && Object.values(sort)[0]
+    search = (sort && { key, value }) || { key: 'id', value: '' }
+    const conditions = { page, perPage: limit, search, sort }
+    if (req.user.roleId !== 1) {
+      const data = {
+        success: false,
+        msg: 'You\'re not allowed to access this feature'
+      }
+      res.send(data)
+    }
+    const results = await TransactionModel.getAllTransaction(conditions)
+    conditions.totalData = await TransactionModel.getTotalTransaction(conditions)
+    conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
+    delete conditions.search
+    delete conditions.sort
+    delete conditions.limit
+    const data = {
+      success: true,
+      data: results,
+      pageInfo: conditions
+    }
+    res.send(data)
   }
+
 }

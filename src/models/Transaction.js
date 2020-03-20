@@ -1,28 +1,16 @@
 const db = require('../utils/db')
+
 module.exports = {
-  CreateBus: function (idAgent, name, busSeat) {
-    const table = 'busses'
-    const query = `INSERT INTO ${table} (idAgent,name,bus_seat) VALUES (${idAgent}, '${name}', ${busSeat})`
+  create: function (idUser, idSchedule, price) {
+    const table = 'transactions'
+    const query = `INSERT INTO ${table} (id_user, id_schedule, price) VALUES
+                  ${idUser}, ${idSchedule}, ${price}`
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)
         } else {
-          resolve(results.insertId)
-        }
-      })
-    })
-  },
-  updateBuss: function (id, idAgent, name) {
-    return new Promise(function (resolve, reject) {
-      const table = 'busses'
-      const query = `UPDATE ${table} SET id_agent=${idAgent}, name='${name}' WHERE id=${id}`
-      console.log(query)
-      db.query(query, function (err, results, fields) {
-        if (err) {
-          reject(err)
-        } else {
-          if (results.affectedRows) {
+          if (results.insertId) {
             resolve(true)
           } else {
             resolve(false)
@@ -31,26 +19,9 @@ module.exports = {
       })
     })
   },
-  // updateAgentForUser: function (id, name) {
-  //   return new Promise(function (resolve, reject) {
-  //     const query = `UPDATE ${table} SET  name='${name}' WHERE id=${id}`
-  //     console.log(query)
-  //     db.query(query, function (err, results, fields) {
-  //       if (err) {
-  //         reject(err)
-  //       } else {
-  //         if (results.affectedRows) {
-  //           resolve(true)
-  //         } else {
-  //           resolve(false)
-  //         }
-  //       }
-  //     })
-  //   })
-  // },
-  deleteBuss: function (id) {
+  deleteTransaction: function (id) {
     return new Promise(function (resolve, reject) {
-      const table = 'busses'
+      const table = 'transactions'
       const query = `DELETE FROM ${table} WHERE id=${id}`
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -65,13 +36,13 @@ module.exports = {
       })
     })
   },
-  getAllBusses: function (conditions = {}) {
+  getAllTransaction: function (conditions = {}) {
     let { page, perPage, sort, search } = conditions
     page = page || 1
     perPage = perPage || 5
     sort = sort || { key: 'id', value: 1 } // value => 0 untuk ascending, 1 descending
-    search = search || { key: 'name', value: '' }
-    const table = 'busses'
+    search = search || { key: 'price', value: '' }
+    const table = 'transactions'
     return new Promise(function (resolve, reject) {
       const sql = `SELECT * FROM ${table}
                   WHERE ${search.key} LIKE '${search.value}%'
@@ -86,10 +57,10 @@ module.exports = {
       })
     })
   },
-  getTotalBusses: function (conditions = {}) {
+  getTotalTransaction: function (conditions = {}) {
     let { search } = conditions
-    search = search || { key: 'name', value: '' }
-    const table = 'busses'
+    search = search || { key: 'price', value: '' }
+    const table = 'transactions'
     return new Promise(function (resolve, reject) {
       const sql = `SELECT COUNT (*) AS total FROM ${table}
                   WHERE ${search.key} LIKE '${search.value}%'`
@@ -98,6 +69,23 @@ module.exports = {
           reject(err)
         } else {
           resolve(results[0].total)
+        }
+      })
+    })
+  },
+  updateTransaction: function (id, idUser, idSchedule, price) {
+    return new Promise(function (resolve, reject) {
+      const table = 'transactions'
+      const query = `UPDATE ${table} SET id_user=${idUser}, id_schedule=${idSchedule}, price=${price} WHERE id=${id}`
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
         }
       })
     })

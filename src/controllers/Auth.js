@@ -1,7 +1,7 @@
 // define a model
 const AuthModel = require('../models/Auth')
 const UserModel = require('../models/Users')
-
+const UserdModel = require('../models/UserDetails')
 // package
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')

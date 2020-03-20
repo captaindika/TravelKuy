@@ -2,6 +2,7 @@ const UserdModel = require('../models/UserDetails')
 const UserModel = require('../models/Users')
 const AdminModel = require('../models/Admin')
 const AgentModel = require('../models/Agent')
+const BussModel = require('../models/Bus')
 
 // package
 const bcrypt = require('bcryptjs')
@@ -24,7 +25,7 @@ module.exports = {
     }
     res.send(data)
   },
-  read: async function (req, res) {
+  readAgent: async function (req, res) {
     let { page, limit, search, sort } = req.query
     page = parseInt(page) || 1
     limit = parseInt(limit) || 5
@@ -75,5 +76,80 @@ module.exports = {
       }
       res.send(data)
     }
+  },
+  createBus: async function (req, res) {
+    const { idAgent, name, seat } = req.body
+    await BussModel.CreateBus(idAgent, name, seat)
+    const data = {
+      success: true,
+      msg: 'Bus created'
+    }
+    res.send(data)
+  },
+  readBus: async function (req, res) {
+    let { page, limit, search, sort } = req.query
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 5
+
+    let key = search && Object.keys(search)[0]
+    let value = search && Object.values(search)[0]
+    search = (search && { key, value }) || { key: 'id', value: '' }
+
+    key = sort && Object.keys(sort)[0]
+    value = sort && Object.values(sort)[0]
+    search = (sort && { key, value }) || { key: 'id', value: '' }
+    const conditions = { page, perPage: limit, search, sort }
+    if (req.user.roleId !== 1) {
+      const data = {
+        success: false,
+        msg: 'You\'re not allowed to access this feature'
+      }
+      res.send(data)
+    }
+    const results = await BussModel.getAllBusses(conditions)
+    conditions.totalData = await BussModel.getTotalBusses(conditions)
+    conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
+    delete conditions.search
+    delete conditions.sort
+    delete conditions.limit
+    const data = {
+      success: true,
+      data: results,
+      pageInfo: conditions
+    }
+    res.send(data)
+  },
+  readUserDetail: async function (req, res) {
+    let { page, limit, search, sort } = req.query
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 5
+
+    let key = search && Object.keys(search)[0]
+    let value = search && Object.values(search)[0]
+    search = (search && { key, value }) || { key: 'id', value: '' }
+
+    key = sort && Object.keys(sort)[0]
+    value = sort && Object.values(sort)[0]
+    search = (sort && { key, value }) || { key: 'id', value: '' }
+    const conditions = { page, perPage: limit, search, sort }
+    if (req.user.roleId !== 1) {
+      const data = {
+        success: false,
+        msg: 'You\'re not allowed to access this feature'
+      }
+      res.send(data)
+    }
+    const results = await UserdModel.getAllUserDetail(conditions)
+    conditions.totalData = await UserdModel.getTotalUserDetail(conditions)
+    conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
+    delete conditions.search
+    delete conditions.sort
+    delete conditions.limit
+    const data = {
+      success: true,
+      data: results,
+      pageInfo: conditions
+    }
+    res.send(data)
   }
 }

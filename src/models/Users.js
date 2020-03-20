@@ -26,7 +26,7 @@ module.exports = {
     search = search || { key: 'username', value: '' }
     const table = 'users'
     return new Promise(function (resolve, reject) {
-      const query = `SELECT COUNT (*) AS TOTAL FROM ${table}
+      const query = `SELECT COUNT (*) AS total FROM ${table}
                     WHERE ${search.key} LIKE '${search.value}%'`
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -101,6 +101,12 @@ module.exports = {
           }
         }
       })
+    })
+  },
+  checkRoleId: function(id) {
+    const table = 'users'
+    return new Promise(function (resolve, reject) {
+      const sql = `SELECT COUNT(*) as total from ${table} `
     })
   }
 }

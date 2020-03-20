@@ -1,6 +1,6 @@
 const UserdModel = require('../models/UserDetails')
 const UserModel = require('../models/Users')
-const AuthModel = require('../models/Auth')
+const AdminModel = require('../models/Admin')
 const AgentModel = require('../models/Agent')
 
 // package
@@ -44,8 +44,8 @@ module.exports = {
       }
       res.send(data)
     }
-    const results = await AgentModel.getAllAgent(conditions)
-    conditions.totalData = await AgentModel.getTotalAgent(conditions)
+    const results = await AgentModel.getAllAgents(conditions)
+    conditions.totalData = await AgentModel.getTotalAgents(conditions)
     conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
     delete conditions.search
     delete conditions.sort
@@ -56,5 +56,24 @@ module.exports = {
       pageInfo: conditions
     }
     res.send(data)
+  },
+  createAgent: async function (req, res) {
+    const { idUser, agentName } = req.body
+    await AdminModel.createAgent(idUser)
+    const checkAgentName = await AgentModel.checkAgentExist(agentName)
+    if (checkAgentName !== 0) {
+      const data = {
+        success: false,
+        data: `Agent '${agentName}' has been used`
+      }
+      res.send(data)
+    } else {
+      AgentModel.createAgent(idUser, agentName)
+      const data = {
+        success: true,
+        msg: `${agentName} has been add into agent`
+      }
+      res.send(data)
+    }
   }
 }

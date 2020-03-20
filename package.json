@@ -1,0 +1,40 @@
+{
+  "name": "travelkuy",
+  "version": "1.0.0",
+  "description": "this is a project for first weekend in arkademy bootcamp",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/captaindika/TravelKuy.git"
+  },
+  "keywords": [
+    "express",
+    "multer",
+    "travel",
+    "ticket",
+    "reservation"
+  ],
+  "author": "dk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/captaindika/TravelKuy/issues"
+  },
+  "homepage": "https://github.com/captaindika/TravelKuy#readme",
+  "devDependencies": {
+    "standard": "^14.3.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "uuid": "^7.0.2"
+  }
+}

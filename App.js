@@ -11,9 +11,11 @@ app.use(bodyParser.json()) // for json
 // import router
 const AuthRouter = require('./src/routes/Auth')
 const AdminRouter = require('./src/routes/Admin')
+const UserRouter = require('./src/routes/User')
 
 app.use('/auth', AuthRouter)
 app.use('/admin', AdminRouter)
+app.use('/user', UserRouter)
 
 // create migration table
 

@@ -1,11 +1,12 @@
 const UserdModel = require('../models/UserDetails')
+const AuthModel = require('../models/Auth')
 const UserModel = require('../models/Users')
 const AdminModel = require('../models/Admin')
 const AgentModel = require('../models/Agent')
 const BussModel = require('../models/Bus')
 const RouteModel = require('../models/Route')
 const ScheduleModel = require('../models/Schedule')
-const TransactionModel = require ('../models/Transaction')
+const TransactionModel = require('../models/Transaction')
 
 // package
 const bcrypt = require('bcryptjs')
@@ -21,7 +22,10 @@ module.exports = {
     const email = process.env.ADMIN_EMAIL
     const money = 1000000000
     await UserModel.createAdmin(username, encryptedPass)
-    await UserdModel.createAdminDetail(name, email, phone, money)
+    const info = await AuthModel.getUserByUsername(username)
+    const id = info.id
+    console.log(info)
+    await UserdModel.createAdminDetail(id, name, email, phone, money)
     const data = {
       success: true,
       msg: `Username ${username} has been created`

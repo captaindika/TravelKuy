@@ -1,9 +1,10 @@
 const db = require('../utils/db')
 
 module.exports = {
-  createAdminDetail: function (name, email, phone, balance) {
+  createUserDetail: function (idUser, name, email, phone, balance) {
     const table = 'user_details'
-    const query = `INSERT INTO ${table} (name, email, phone, balance) VALUES('${name}','${email}','${phone}', ${balance})`
+    const query = `INSERT INTO ${table} (id_user, name, email, phone, balance) VALUES(${idUser}, '${name}','${email}','${phone}', ${balance})`
+    console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -18,9 +19,10 @@ module.exports = {
       })
     })
   },
-  getIdAdminDetail: function (email) {
+  getUserDetailByIdUser: function (idUser) {
     const table = 'user_details'
-    const query = `SELECT id FROM ${table} WHERE email='${email}'`
+    const query = `SELECT * FROM ${table} WHERE id_user='${idUser}'`
+    console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {

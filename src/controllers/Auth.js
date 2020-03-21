@@ -9,7 +9,7 @@ const uuid = require('uuid').v4
 
 module.exports = {
   register: async function (req, res) {
-    const { username, password } = req.body
+    const { username, password, name, phone, email } = req.body
     const checkUser = await AuthModel.checkUsername(username)
     if (checkUser !== 0) {
       const data = {
@@ -20,6 +20,8 @@ module.exports = {
     } else {
       const encrypPass = bcrypt.hashSync(password)
       const results = await UserModel.createUser(null, username, encrypPass)
+      const info = await AuthModel.getUserByUsername(username)
+      await UserdModel.createUserDetail(info.id, name, email, phone, 0)
       if (results) {
         if (await AuthModel.createVerificationCode(results, uuid())) {
           const code = await AuthModel.getVerificationCode(username)
@@ -56,7 +58,7 @@ module.exports = {
     } else {
       const data = {
         success: false,
-        msg: 'User can\'t be activated'
+        msg: 'User can\'t be activated, please register again'
       }
       res.send(data)
     }
@@ -76,7 +78,7 @@ module.exports = {
       if (checkPass) {
         if (await AuthModel.checkVerifiedUser) {
           if (await AuthModel.checkActivatedUser) {
-            const payload = { username, roleId: info.role_id }
+            const payload = { id: info.id, username, roleId: info.role_id }
             const options = { expiresIn: '15m' }
             const key = process.env.APP_KEY
             const token = jwt.sign(payload, key, options)

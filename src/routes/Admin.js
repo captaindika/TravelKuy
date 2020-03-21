@@ -8,14 +8,14 @@ const UserdControl = require('../controllers/UserDetail')
 
 Admin.post('/create', AdminControl.createAdmin)
 Admin.post('/login', AuthControl.login)
-Admin.post('/agent', AdminControl.createAgent)
+
 // get
 Admin.get('/users', TokenMid.checkToken, UserControl.read)
 Admin.get('/agent', TokenMid.checkToken, AdminControl.readAgent)
+Admin.get('/agent/userId', TokenMid.checkToken, AdminControl.getAgentByUser)
 Admin.get('/bus', TokenMid.checkToken, AdminControl.readBus)
 Admin.get('/user-detail', TokenMid.checkToken, AdminControl.readUserDetail)
 Admin.get('/route', TokenMid.checkToken, AdminControl.readRoutes)
-// Admin.get('/route')
 Admin.get('/schedule', TokenMid.checkToken, AdminControl.readSchedules)
 Admin.get('/transaction', TokenMid.checkToken, AdminControl.readTransaction)
 Admin.get('/detail', TokenMid.checkToken, UserdControl.getUserDetailByIdUser)
@@ -24,10 +24,13 @@ Admin.get('/detail', TokenMid.checkToken, UserdControl.getUserDetailByIdUser)
 Admin.post('/agent/add', TokenMid.checkToken, AdminControl.createAgent)
 Admin.post('/bus/add', TokenMid.checkToken, AdminControl.createBus)
 Admin.post('/route/add', TokenMid.checkToken, AdminControl.createRoutes)
+// Admin.post('/schedule/add', )
 
 // delete
 Admin.delete('/route/delete', TokenMid.checkToken, AdminControl.deleteRoutes)
+Admin.delete('/agent/delete', TokenMid.checkToken, AdminControl.deleteAgent)
 
 // update
 Admin.patch('/route/update', TokenMid.checkToken, AdminControl.updateRoutes)
+Admin.patch('/agent/update', TokenMid.checkToken, AdminControl.updateAgent)
 module.exports = Admin

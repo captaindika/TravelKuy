@@ -14,9 +14,9 @@ module.exports = {
       })
     })
   },
-  checkAgentExist: function (name) {
+  checkUserHasAgent: function (id) {
     return new Promise(function (resolve, reject) {
-      const query = `SELECT COUNT (*) AS total FROM ${table} WHERE name = '${name}'`
+      const query = `SELECT COUNT(*) AS total FROM ${table} WHERE id_user = '${id}'`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -77,6 +77,23 @@ module.exports = {
       })
     })
   },
+  deleteAgentById: function (idAgent) {
+    return new Promise(function (resolve, reject) {
+      const table = 'agents'
+      const query = `DELETE FROM ${table} WHERE id = ${idAgent}`
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
   getAllAgents: function (conditions = {}) {
     let { page, perPage, sort, search } = conditions
     page = page || 1
@@ -118,6 +135,20 @@ module.exports = {
     const table = 'agents'
     return new Promise(function (resolve, reject) {
       const query = `SELECT * FROM ${table} WHERE id_user=${id}`
+      console.log(query)
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results[0])
+        }
+      })
+    })
+  },
+  findAgentById: function (id) {
+    const table = 'agents'
+    return new Promise(function (resolve, reject) {
+      const query = `SELECT * FROM ${table} WHERE id=${id}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {

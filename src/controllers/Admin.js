@@ -32,6 +32,63 @@ module.exports = {
     }
     res.send(data)
   },
+  deleteAgent: async function (req, res) {
+    const { idAgent } = req.body
+    if (idAgent) {
+      if (req.user.roleId === 1) {
+        if (await AgentModel.deleteAgentById(idAgent)) {
+          const data = {
+            success: true,
+            msg: 'Agent has been removed'
+          }
+          res.send(data)
+        } else {
+          const data = {
+            success: false,
+            msg: 'Id agent not found'
+          }
+          res.send(data)
+        }
+      } else {
+        const data = {
+          success: false,
+          msg: 'you cannot access this feature'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'Enter id agent'
+      }
+      res.send(data)
+    }
+  },
+  getAgentByUser: async function (req, res) {
+    const { id } = req.body
+    if (req.user.roleId === 1) {
+      const info = await AgentModel.findAgentByIdUser(id)
+      if (info) {
+        const data = {
+          success: true,
+          info
+        }
+        res.send(data)
+      } else {
+        const data = {
+          success: false,
+          msg: 'User id doesnt have agent'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'you cannot access this feature'
+      }
+      res.send(data)
+    }
+  },
   readAgent: async function (req, res) {
     let { page, limit, search, sort } = req.query
     page = parseInt(page) || 1
@@ -67,17 +124,36 @@ module.exports = {
   },
   createAgent: async function (req, res) {
     const { idUser } = req.body
-    if (!idUser) {
+    if (req.user.roleId === 1) {
+      if (!(idUser)) {
+        const data = {
+          success: false,
+          msg: 'Enter the id user'
+        }
+        res.send(data)
+      } else {
+        const info = await UserModel.getUserById(idUser)
+        const name = `${info.username} agent`
+        if (info) {
+          await AdminModel.createAgent(idUser)
+          await AgentModel.createAgent(idUser, name)
+          const data = {
+            success: true,
+            msg: `${idUser} has been an agent`
+          }
+          res.send(data)
+        } else {
+          const data = {
+            success: false,
+            msg: 'Id user not found'
+          }
+          res.send(data)
+        }
+      }
+    } else {
       const data = {
         success: false,
-        msg: 'Enter the id user'
-      }
-      res.send(data)
-    } else {
-      await AdminModel.createAgent(idUser)
-      const data = {
-        success: true,
-        msg: `${idUser} has been an agent`
+        msg: 'you cannot access this feature'
       }
       res.send(data)
     }
@@ -317,11 +393,10 @@ module.exports = {
           info
         }
         res.send(data)
-
       } else {
         const data = {
           success: false,
-          msg: 'id Route can not found/ enter start and end '
+          msg: 'id Route can not found / enter start and end'
         }
         res.send(data)
       }
@@ -333,5 +408,45 @@ module.exports = {
       res.send(data)
     }
     // RouteModel.updateRoute
+  },
+  updateAgent: async function (req, res) {
+    let { idAgent, idUser, name } = req.body
+    const a = await AgentModel.checkUserHasAgent(idUser)
+    if (req.user.roleId === 1) {
+      if (idUser) {
+        if (a === 0) {
+          name = name || 'Agent'
+          AdminModel.createAgent(idUser)
+          AgentModel.deleteAgentById(idAgent) // cause on delete cascade so i delete and make new one
+          AgentModel.createAgent(idUser, name)
+          const data = {
+            success: true,
+            msg: 'agent updated'
+          }
+          res.send(data)
+        } else {
+          const info = await AgentModel.findAgentById(idAgent)
+          name = name || info.name
+          AgentModel.updateAgent(idAgent, idUser, name)
+          const data = {
+            success: true,
+            msg: 'agent updated'
+          }
+          res.send(data)
+        }
+      } else {
+        const data = {
+          success: false,
+          msg: 'Enter id user'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'You cannot access this feature'
+      }
+      res.send(data)
+    }
   }
 }

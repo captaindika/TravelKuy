@@ -88,7 +88,7 @@ module.exports = {
   deleteUser: function (id) {
     const table = 'users'
     return new Promise(function (resolve, reject) {
-      const query = `DELETE FROM ${table} WHERE id=${id}`
+      const query = ` DELETE FROM ${table} WHERE id= ${id}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -96,6 +96,23 @@ module.exports = {
         } else {
           if (results.affectedRows) {
             resolve(true)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  getUserById: function (id) {
+    const table = 'users'
+    const query = `SELECT * FROM ${table} WHERE id=${id}`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.length) {
+            resolve(results[0])
           } else {
             resolve(false)
           }

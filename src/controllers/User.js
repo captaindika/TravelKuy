@@ -1,25 +1,27 @@
 const UserModel = require('../models/Users')
 const AuthModel = require('../models/Auth')
+const AgenModel = require('../models/Agent')
 
 // package
 const bcrypt = require('bcryptjs')
 const uuid = require('uuid').v4
 
 module.exports = {
-  registerAgent: async function (req, res) {
-    const { id, username } = req.body
-    if (await AuthModel.createVerificationCode(id, uuid())) {
-      const code = await AuthModel.getVerificationCode(username)
+  createAgent: async function (req, res) {
+    let { nameAgent } = req.body
+    const info = req.user
+    nameAgent = nameAgent || `${info.username} agent`
+    if (info.roleId === 2) {
+      await AgenModel.createAgent(info.id, nameAgent)
       const data = {
         success: true,
-        msg: 'request code success',
-        code
+        msg: 'Agent created'
       }
       res.send(data)
     } else {
       const data = {
         success: false,
-        msg: 'request code couldn\'t be generate'
+        msg: 'Ask administration become an agent'
       }
       res.send(data)
     }

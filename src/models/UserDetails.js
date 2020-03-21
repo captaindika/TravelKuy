@@ -77,7 +77,6 @@ module.exports = {
   updateUserDetailByIdUser: function (id, name, email, phone) {
     const table = 'user_details'
     const sql = `UPDATE ${table} SET name='${name}', email='${email}', phone='${phone}' WHERE id_user=${id}`
-    console.log(sql)
     return new Promise(function (resolve, reject) {
       db.query(sql, function (err, results, fields) {
         if (err) {

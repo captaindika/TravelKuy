@@ -66,30 +66,30 @@ module.exports = {
     res.send(data)
   },
   createAgent: async function (req, res) {
-    const { idUser, agentName } = req.body
-    await AdminModel.createAgent(idUser)
-    const checkAgentName = await AgentModel.checkAgentExist(agentName)
-    if (checkAgentName !== 0) {
+    const { idUser } = req.body
+    if (!idUser) {
       const data = {
         success: false,
-        data: `Agent '${agentName}' has been used`
+        msg: 'Enter the id user'
       }
       res.send(data)
     } else {
-      AgentModel.createAgent(idUser, agentName)
+      await AdminModel.createAgent(idUser)
       const data = {
         success: true,
-        msg: `${agentName} has been add into agent`
+        msg: `${idUser} has been an agent`
       }
       res.send(data)
     }
   },
   createBus: async function (req, res) {
-    const { idAgent, name, seat } = req.body
-    await BussModel.CreateBus(idAgent, name, seat)
+    const info = req.user
+    // const { idAgent, name, seat } = req.body
+    // await BussModel.CreateBus(idAgent, name, seat)
     const data = {
       success: true,
-      msg: 'Bus created'
+      msg: 'Bus created',
+      info
     }
     res.send(data)
   },

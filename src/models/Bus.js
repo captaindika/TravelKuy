@@ -31,23 +31,6 @@ module.exports = {
       })
     })
   },
-  // updateAgentForUser: function (id, name) {
-  //   return new Promise(function (resolve, reject) {
-  //     const query = `UPDATE ${table} SET  name='${name}' WHERE id=${id}`
-  //     console.log(query)
-  //     db.query(query, function (err, results, fields) {
-  //       if (err) {
-  //         reject(err)
-  //       } else {
-  //         if (results.affectedRows) {
-  //           resolve(true)
-  //         } else {
-  //           resolve(false)
-  //         }
-  //       }
-  //     })
-  //   })
-  // },
   deleteBuss: function (id) {
     return new Promise(function (resolve, reject) {
       const table = 'busses'

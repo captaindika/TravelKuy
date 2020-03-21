@@ -102,11 +102,5 @@ module.exports = {
         }
       })
     })
-  },
-  checkRoleId: function(id) {
-    const table = 'users'
-    return new Promise(function (resolve, reject) {
-      const sql = `SELECT COUNT(*) as total from ${table} `
-    })
   }
 }

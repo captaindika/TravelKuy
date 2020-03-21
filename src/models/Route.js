@@ -53,15 +53,67 @@ module.exports = {
   },
   deleteRoute: function (id) {
     const table = 'routes'
-    const sql = `DELETE FROM ${table} WHERE id=${id}`
-    console.log(sql)
     return new Promise(function (resolve, reject) {
+      const sql = `DELETE FROM ${table} WHERE id=${id}`
+      console.log(sql)
       db.query(sql, function (err, results, fields) {
         if (err) {
           reject(err)
         } else {
           if (results.affectedRows) {
             resolve(true)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  updateRoute: function (id, start, end) {
+    const table = 'routes'
+    const query = `UPDATE ${table} SET start='${start}', end='${end}' WHERE id=${id}`
+    // console.log(sql)
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(results.affectedRows)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  getRouteByIdUser: function (idUser) {
+    const table = 'routes'
+    const sql = `SELECT * FROM ${table} WHERE id_user=${idUser}`
+    return new Promise(function (resolve, reject) {
+      db.query(sql, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.length) {
+            resolve(results[0])
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  getRouteById: function (id) {
+    const table = 'routes'
+    const sql = `SELECT * FROM  ${table} WHERE id=${id}`
+    return new Promise(function (resolve, reject) {
+      db.query(sql, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.length) {
+            resolve(results[0])
           } else {
             resolve(false)
           }

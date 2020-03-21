@@ -266,7 +266,7 @@ module.exports = {
       RouteModel.createRoute(idUser, start, end)
       const data = {
         success: true,
-        msg: `Route has been created by ${req.user.username}`,
+        msg: `Route has been created by ${req.user.username}`
       }
       res.send(data)
     } else {
@@ -300,5 +300,38 @@ module.exports = {
       }
       res.send(data)
     }
+  },
+  updateRoutes: async function (req, res) {
+    if (req.user.roleId === 1) {
+      // console.log(req.user)
+      let { idRoute, start, end } = req.body
+      const info = await RouteModel.getRouteById(idRoute)
+      console.log(info)
+      start = start || info.start
+      end = end || info.end
+      const results = await RouteModel.updateRoute(idRoute, start, end)
+      if (results) {
+        const info = await RouteModel.getRouteById(idRoute)
+        const data = {
+          success: true,
+          info
+        }
+        res.send(data)
+
+      } else {
+        const data = {
+          success: false,
+          msg: 'id Route can not found/ enter start and end '
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'You cannot access this feature'
+      }
+      res.send(data)
+    }
+    // RouteModel.updateRoute
   }
 }

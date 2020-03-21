@@ -2,7 +2,7 @@ const db = require('../utils/db')
 module.exports = {
   CreateBus: function (idAgent, name, busSeat) {
     const table = 'busses'
-    const query = `INSERT INTO ${table} (idAgent,name,bus_seat) VALUES (${idAgent}, '${name}', ${busSeat})`
+    const query = `INSERT INTO ${table} (id_agent,name,bus_seat) VALUES (${idAgent}, '${name}', ${busSeat})`
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {

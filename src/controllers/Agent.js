@@ -5,13 +5,15 @@ module.exports = {
   createBus: async function (req, res) {
     const info = req.user
     const info2 = await AgentModel.findAgentByIdUser(info.id)
-    console.log(info2)
+    let { nameCar, size } = req.body
+    nameCar = nameCar || `Car ${info2.name}`
+    size = size || 5
+    // console.log(info2.id_user)
     if (info.roleId === 2) {
-      // await BusModel.CreateBus()
+      await BusModel.CreateBus(info2.id, nameCar, size)
       const data = {
         success: true,
-        msg: 'Bus created',
-        info2
+        msg: `Bus added by ${info2.name}`
       }
       res.send(data)
     } else {

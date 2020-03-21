@@ -13,17 +13,17 @@ module.exports = {
       })
     })
   },
-  updateBuss: function (id, idAgent, name) {
+  updateBuss: function (id, idAgent, name, size) {
     return new Promise(function (resolve, reject) {
       const table = 'busses'
-      const query = `UPDATE ${table} SET id_agent=${idAgent}, name='${name}' WHERE id=${id}`
+      const query = `UPDATE ${table} SET name='${name}', bus_seat=${size} WHERE id=${id} AND id_agent=${idAgent}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)
         } else {
           if (results.affectedRows) {
-            resolve(true)
+            resolve(results)
           } else {
             resolve(false)
           }
@@ -81,6 +81,38 @@ module.exports = {
           reject(err)
         } else {
           resolve(results[0].total)
+        }
+      })
+    })
+  },
+  findBusByAgent: function (id) {
+    const table = 'busses'
+    const query = `SELECT * FROM ${table} WHERE id_agent=${id}`
+    console.log(query)
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results)
+        }
+      })
+    })
+  },
+  findBusById: function (id) {
+    const table = 'busses'
+    const query = `SELECT * FROM ${table} WHERE id=${id}`
+    console.log(query)
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.length) {
+            resolve(results[0])
+          } else {
+            resolve(false)
+          }
         }
       })
     })

@@ -77,7 +77,7 @@ module.exports = {
           reject(err)
         } else {
           if (results.affectedRows) {
-            resolve(results)
+            resolve(results.affectedRows)
           } else {
             resolve(false)
           }

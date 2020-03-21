@@ -22,4 +22,8 @@ Admin.get('/detail', TokenMid.checkToken, UserdControl.getUserDetailByIdUser)
 // create
 Admin.post('/agent/add', TokenMid.checkToken, AdminControl.createAgent)
 Admin.post('/bus/add', TokenMid.checkToken, AdminControl.createBus)
+Admin.post('/route/add', TokenMid.checkToken, AdminControl.createRoutes)
+
+// delete
+Admin.delete('/route/delete', TokenMid.checkToken, AdminControl.deleteRoutes)
 module.exports = Admin

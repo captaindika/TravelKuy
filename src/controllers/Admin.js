@@ -257,6 +257,48 @@ module.exports = {
       pageInfo: conditions
     }
     res.send(data)
+  },
+  createRoutes: function (req, res) {
+    const { start, end } = req.body
+    const idUser = req.user.id
+    // console.log(req.user.roleId)
+    if (req.user.roleId === 1) {
+      RouteModel.createRoute(idUser, start, end)
+      const data = {
+        success: true,
+        msg: `Route has been created by ${req.user.username}`,
+      }
+      res.send(data)
+    } else {
+      const data = {
+        success: false,
+        msg: 'You cannot access this feature'
+      }
+      res.send(data)
+    }
+  },
+  deleteRoutes: function (req, res) {
+    const { idRoute } = req.body
+    if (req.user.roleId === 1) {
+      if (!RouteModel.deleteRoute(idRoute)) {
+        const data = {
+          success: true,
+          msg: 'Route has been deleted'
+        }
+        res.send(data)
+      } else {
+        const data = {
+          success: false,
+          msg: 'id Route not found'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'You cannot access this feature'
+      }
+      res.send(data)
+    }
   }
-
 }

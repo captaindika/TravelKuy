@@ -43,7 +43,7 @@ module.exports = {
     perPage = perPage || 5
     sort = sort || { key: 'id', value: 1 }
     search = search || { key: 'username', value: '' }
-    const table = 'users'
+    const table = 'user_details'
     return new Promise(function (resolve, reject) {
       const query = `SELECT * FROM ${table}
                     WHERE ${search.key} LIKE '${search.value}%'
@@ -61,11 +61,42 @@ module.exports = {
   getTotalUserDetail: function (conditions = {}) {
     let { search } = conditions
     search = search || { key: 'username', value: '' }
-    const table = 'users'
+    const table = 'user_details'
     return new Promise(function (resolve, reject) {
       const query = `SELECT COUNT (*) AS total FROM ${table}
                     WHERE ${search.key} LIKE '${search.value}%'`
       db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results[0].total)
+        }
+      })
+    })
+  },
+  updateUserDetailByIdUser: function (id, name, email, phone) {
+    const table = 'user_details'
+    const sql = `UPDATE ${table} SET name='${name}', email='${email}', phone='${phone}' WHERE id_user=${id}`
+    console.log(sql)
+    return new Promise(function (resolve, reject) {
+      db.query(sql, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(results)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  topUp: function (id, balance) {
+    const table = 'user_details'
+    const sql = `UPDATE ${table} SET balance=${balance} WHERE id=${id}`
+    return new Promise(function (resolve, reject) {
+      db.query(sql, function (err, results, fields) {
         if (err) {
           reject(err)
         } else {

@@ -129,11 +129,25 @@ module.exports = {
         if (err) {
           reject(err)
         } else {
-          if (results.affectedRows) {
-            resolve(true)
-          } else {
-            resolve(false)
-          }
+          resolve(results)
+        }
+      })
+    })
+  },
+  getTransactionByUser: function (idUser) {
+    const query = `select user_details.name, routes.start, routes.end, schedules.price, 
+    busses.car_name, schedules.departure_date, schedules.departure_time, schedules.arrive_time
+     from transactions, schedules, busses, user_details, routes 
+     where transactions.id_schedule = schedules.id and schedules.id_bus = busses.id 
+     and transactions.id_user = user_details.id_user and schedules.id_route = routes.id 
+     AND transactions.id_user = 18`
+    console.log(query)
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results)
         }
       })
     })

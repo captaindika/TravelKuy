@@ -112,7 +112,7 @@ module.exports = {
   updateBalance: function (idUser, balance) {
     const table = 'user_details'
     const query = `UPDATE ${table} SET balance = ${balance} WHERE id_user=${idUser}`
-    console.log(query)
+    // console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {

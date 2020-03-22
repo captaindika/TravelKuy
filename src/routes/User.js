@@ -19,12 +19,12 @@ User.post('/login', AuthController.login)
 User.post('/transaction/add', AuthToken.checkToken, UserControl.Transaction)
 User.get('/detail', AuthToken.checkToken, UserdControl.getUserDetailByIdUser)
 User.get('/schedule', UserControl.getScheduleForUser)
+User.get('/transaction', AuthToken.checkToken, UserControl.getTransactionbyUser)
 User.patch('/update', AuthToken.checkToken, UserdControl.updateUserDetail)
 User.patch('/topup', AuthToken.checkToken, UserControl.topUp)
-// User.post('/add-agent', AuthToken.checkToken, UserControl.createAgent)
-
+// User.post('/add-agent', AuthToken.checkToken, UserControl.createAgent)\
 // test count
-User.get('/count-schedule', UserControl.countSchedule)
-User.get('/count-seat', UserControl.countSeat)
+// User.get('/count-schedule', UserControl.countSchedule)
+// User.get('/count-seat', UserControl.countSeat)
 
 module.exports = User

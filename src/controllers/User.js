@@ -159,35 +159,44 @@ module.exports = {
     let newBalance = 0
     if (idSchedule) {
       const infoSchedule = await ScheduleModel.getScheduleById(idSchedule)
-      const infoUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
-      newBalance = infoUserd.balance - infoSchedule.price
-      const infoBus = await TransactionModel.getScheduleForSeat(idSchedule)
-      if (infoBus.bus_seat > 0 && newBalance >= 0) {
-        await UserdModel.updateBalance(req.user.id, newBalance)
-        await BussModel.updateBussSeat(infoBus.id)
-        await UserModel.Transaction(idSchedule, req.user.id)
-        const newUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
-        const data = {
-          success: true,
-          msg: 'transaction succes',
-          newUserd
-        }
-        res.send(data)
-      } else {
-        if (infoBus.bus_seat === 0) {
-          await TransactionModel.deleteSchedule(idSchedule)
+      if (infoSchedule) {
+        const infoUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
+        const info = await ScheduleModel.getPriceBySchedule(idSchedule)
+        newBalance = infoUserd.balance - info.price
+        const infoBus = await TransactionModel.getScheduleForSeat(idSchedule)
+        if (infoBus.bus_seat > 0 && newBalance >= 0) {
+          await UserdModel.updateBalance(req.user.id, newBalance)
+          await BussModel.updateBussSeat(infoBus.id)
+          await UserModel.Transaction(idSchedule, req.user.id)
+          const newUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
           const data = {
             success: true,
-            msg: 'Bus seat is full, schedule was deleted'
+            msg: 'transaction succes',
+            newUserd
           }
           res.send(data)
         } else {
-          const data = {
-            success: false,
-            msg: 'Please top up your balance'
+          if (infoBus.bus_seat === 0) {
+            // await TransactionModel.deleteSchedule(idSchedule)
+            const data = {
+              success: true,
+              msg: 'Bus seat is full, schedule was deleted'
+            }
+            res.send(data)
+          } else {
+            const data = {
+              success: false,
+              msg: 'Please top up your balance'
+            }
+            res.send(data)
           }
-          res.send(data)
         }
+      } else {
+        const data = {
+          success: false,
+          msg: 'Schedule not found'
+        }
+        res.send(data)
       }
     } else {
       const data = {
@@ -217,5 +226,14 @@ module.exports = {
     const { idSchedule } = req.body
     const info = await TransactionModel.getScheduleForSeat(idSchedule)
     console.log(info.bus_seat)
+  },
+  getTransactionbyUser: async function (req, res) {
+    const info = await TransactionModel.getTransactionByUser(req.user.id)
+    console.log(info)
+    const data = {
+      success: true,
+      info
+    }
+    res.send(data)
   }
 }

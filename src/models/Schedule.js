@@ -110,6 +110,24 @@ module.exports = {
   getScheduleById: async function (id) {
     const table = 'schedules'
     const query = `SELECT * FROM ${table} WHERE id = ${id}`
+    console.log(query)
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.length) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  getPriceBySchedule: async function (idSchedule) {
+    const table = 'schedules'
+    const query = `SELECT price FROM ${table} WHERE id = ${idSchedule}`
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -117,6 +135,8 @@ module.exports = {
         } else {
           if (results.length) {
             resolve(results[0])
+          } else {
+            resolve(false)
           }
         }
       })

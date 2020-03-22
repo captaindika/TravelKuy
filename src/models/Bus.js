@@ -2,7 +2,7 @@ const db = require('../utils/db')
 module.exports = {
   CreateBus: function (idAgent, name, busSeat) {
     const table = 'busses'
-    const query = `INSERT INTO ${table} (id_agent,name,bus_seat) VALUES (${idAgent}, '${name}', ${busSeat})`
+    const query = `INSERT INTO ${table} (id_agent,car_name,bus_seat) VALUES (${idAgent}, '${name}', ${busSeat})`
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -16,7 +16,7 @@ module.exports = {
   updateBuss: function (id, name, size) {
     return new Promise(function (resolve, reject) {
       const table = 'busses'
-      const query = `UPDATE ${table} SET name='${name}', bus_seat=${size} WHERE id=${id}`
+      const query = `UPDATE ${table} SET car_name='${name}', bus_seat=${size} WHERE id=${id}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -34,7 +34,7 @@ module.exports = {
   updateBussAdmin: function (id, idAgent, name, size) {
     return new Promise(function (resolve, reject) {
       const table = 'busses'
-      const query = `UPDATE ${table} SET id_agent=${idAgent}, name='${name}', bus_seat=${size} WHERE id=${id}`
+      const query = `UPDATE ${table} SET id_agent=${idAgent}, car_name='${name}', bus_seat=${size} WHERE id=${id}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -70,8 +70,8 @@ module.exports = {
     let { page, perPage, sort, search } = conditions
     page = page || 1
     perPage = perPage || 5
-    sort = sort || { key: 'id', value: 1 } // value => 0 untuk ascending, 1 descending
-    search = search || { key: 'name', value: '' }
+    sort = sort || { key: 'id', value: 0 } // value => 0 untuk ascending, 1 descending
+    search = search || { key: 'car_name', value: '' }
     const table = 'busses'
     return new Promise(function (resolve, reject) {
       const sql = `SELECT * FROM ${table}
@@ -89,7 +89,7 @@ module.exports = {
   },
   getTotalBusses: function (conditions = {}) {
     let { search } = conditions
-    search = search || { key: 'name', value: '' }
+    search = search || { key: 'car_name', value: '' }
     const table = 'busses'
     return new Promise(function (resolve, reject) {
       const sql = `SELECT COUNT (*) AS total FROM ${table}
@@ -139,7 +139,7 @@ module.exports = {
     return new Promise(function (resolve, reject) {
       const table = 'busses'
       const query = `UPDATE ${table} SET bus_seat=bus_seat-1 WHERE id=${id}`
-      console.log(query)
+      // console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)

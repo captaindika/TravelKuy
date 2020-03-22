@@ -158,16 +158,33 @@ module.exports = {
       res.send(data)
     }
   },
-  createBus: async function (req, res) {
-    const info = req.user
-    // const { idAgent, name, seat } = req.body
+  createBusAdmin: async function (req, res) {
+    const { idUser, nameBuss, busSeat } = req.body
+    if (req.user.roleId === 1) {
+      const agent = await AgentModel.findAgentByIdUser(idUser)
+      if (agent) { // check if id is agent or not
+        await BussModel.CreateBus(agent.id, nameBuss, busSeat)
+        const data = {
+          success: true,
+          msg: `Car ${nameBuss} created with id agent ${agent.id}`
+        }
+        res.send(data)
+      } else {
+        const data = {
+          success: false,
+          msg: 'Your id is not agent, register it first'
+        }
+        res.send(data)
+      }
+      // const { idAgent, name, seat } = req.body
     // await BussModel.CreateBus(idAgent, name, seat)
-    const data = {
-      success: true,
-      msg: 'Bus created',
-      info
+    } else {
+      const data = {
+        success: false,
+        msg: 'You cannot access this feature'
+      }
+      res.send(data)
     }
-    res.send(data)
   },
   readBus: async function (req, res) {
     let { page, limit, search, sort } = req.query

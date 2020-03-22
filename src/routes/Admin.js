@@ -22,7 +22,7 @@ Admin.get('/detail', TokenMid.checkToken, UserdControl.getUserDetailByIdUser)
 
 // create
 Admin.post('/agent/add', TokenMid.checkToken, AdminControl.createAgent)
-Admin.post('/bus/add', TokenMid.checkToken, AdminControl.createBus)
+Admin.post('/bus/add', TokenMid.checkToken, AdminControl.createBusAdmin)
 Admin.post('/route/add', TokenMid.checkToken, AdminControl.createRoutes)
 // Admin.post('/schedule/add', )
 

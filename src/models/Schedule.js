@@ -1,10 +1,11 @@
 const db = require('../utils/db')
 
 module.exports = {
-  createSchedule: function (idUser, idBus, idRoute, departureTime, arriveTime) {
+  createSchedule: function (idUser, idBus, idRoute, price, departureTime, arriveTime) {
     const table = 'schedules'
-    const query = `INSERT INTO ${table} (id_user, id_bus, id_route, departure_time, arrive_time)
-    VALUES (${idUser}, ${idBus},${idRoute}, '${departureTime}', '${arriveTime}')`
+    const query = `INSERT INTO ${table} (id_admin, id_bus, id_route, price, departure_time, arrive_time)
+    VALUES (${idUser}, ${idBus},${idRoute}, ${price},'${departureTime}', '${arriveTime}')`
+    console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -19,10 +20,24 @@ module.exports = {
       })
     })
   },
-  deleteSchedule: function (id) {
+  getScheduleByIdAdmin: function (idAdmin) {
+    const table = 'schedules'
+    const query = `SELECT * FROM ${table} WHERE id_admin = ${idAdmin}`
+    console.log(query)
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results)
+        }
+      })
+    })
+  },
+  deleteSchedule: function (id, idAdmin) {
     return new Promise(function (resolve, reject) {
       const table = 'schedules'
-      const query = `DELETE FROM ${table} WHERE id=${id}`
+      const query = `DELETE FROM ${table} WHERE id=${id} AND id_admin=${idAdmin}`
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)
@@ -73,11 +88,12 @@ module.exports = {
       })
     })
   },
-  updateSchedule: function (id, idUser, idBus, idRoute, departureTime, arriveTime) {
+  updateSchedule: function (id, idAdmin, idBus, idRoute, departureTime, arriveTime) {
     return new Promise(function (resolve, reject) {
       const table = 'schedules'
-      const query = `UPDATE ${table} SET id_user=${idUser}, id_bus=${idBus}, id_route-${idRoute},
-      departure_time=${departureTime}, arriveTime=${arriveTime} WHERE id=${id}`
+      const query = `UPDATE ${table} SET id_bus=${idBus}, id_route=${idRoute},
+      departure_time='${departureTime}', arrive_time='${arriveTime}' WHERE id=${id} AND id_admin = ${idAdmin}`
+      console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)
@@ -86,6 +102,21 @@ module.exports = {
             resolve(true)
           } else {
             resolve(false)
+          }
+        }
+      })
+    })
+  },
+  getScheduleById: async function (id) {
+    const table = 'schedules'
+    const query = `SELECT * FROM ${table} WHERE id = ${id}`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.length) {
+            resolve(results[0])
           }
         }
       })

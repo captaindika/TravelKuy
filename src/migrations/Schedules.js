@@ -1,14 +1,15 @@
 const db = require('../utils/db')
 db.query(`CREATE TABLE IF NOT EXISTS schedules (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  id_user INT NOT NULL,
+  id_admin INT NOT NULL,
   id_bus INT NOT NULL,
   id_route INT NOT NULL,
+  price INT,
   departure_time DATETIME NOT NULL,
   arrive_time DATETIME NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT user_schedules FOREIGN KEY(id_user) REFERENCES agents(id) ON UPDATE CASCADE ,
+  CONSTRAINT user_schedules FOREIGN KEY(id_admin) REFERENCES users(id) ON UPDATE CASCADE ,
   CONSTRAINT bus_schedules FOREIGN KEY(id_bus) REFERENCES busses(id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT route_schedules FOREIGN KEY(id_route) REFERENCES routes(id) ON DELETE CASCADE ON UPDATE CASCADE
 )`)

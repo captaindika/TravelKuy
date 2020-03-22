@@ -502,5 +502,151 @@ module.exports = {
       }
       res.send(data)
     }
+  },
+  createSchedules: async function (req, res) {
+    if (req.user.roleId === 1) {
+      let { idBus, idRoute, price, departureTime, arriveTime } = req.body
+      const infoBus = await BussModel.findBusById(idBus)
+      const infoRoute = await RouteModel.getRouteById(idRoute)
+      // Define price on your own definition by route
+      switch (infoRoute.id) {
+        case 1:
+          price = price || 100000
+          break
+        case 2:
+          price = price || 200000
+          break
+        case 3:
+          price = price || 300000
+          break
+        default:
+          price = price || 150000
+      }
+      if (infoBus && infoRoute) {
+        const results = await ScheduleModel.createSchedule(req.user.id, idBus, idRoute, price, departureTime, arriveTime)
+        if (results) {
+          const data = {
+            success: true,
+            msg: 'Schedule created'
+          }
+          res.send(data)
+        } else {
+          const data = {
+            success: false,
+            msg: 'U missing the parameter on req.body'
+          }
+          res.send(data)
+        }
+      } else {
+        const data = {
+          success: false,
+          msg: `id Bus ${idBus} / id route ${idRoute} not found`
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: true,
+        msg: 'U cant access this feature'
+      }
+      res.send(data)
+    }
+  },
+  getScheduleAdminMade: async function (req, res) {
+    if (req.user.roleId === 1) {
+      const results = await ScheduleModel.getScheduleByIdAdmin(req.user.id)
+      const data = {
+        success: true,
+        results
+      }
+      res.send(data)
+    } else {
+      const data = {
+        success: false,
+        msg: 'U cant access this feature'
+      }
+      res.send(data)
+    }
+  },
+  updateSchedule: async function (req, res) {
+    if (req.user.roleId === 1) {
+      const { idSchedule, idRoute, idBus, departureTime, arriveTime } = req.body
+      const checkIdSchedule = await ScheduleModel.getScheduleById(idSchedule)
+      const checkIdBus = await BussModel.findBusById(idBus)
+      const checkRoute = await RouteModel.getRouteById(idRoute)
+      if (checkIdSchedule) {
+        if (idRoute && idBus && departureTime && arriveTime) {
+          if (checkIdBus && checkRoute) {
+            await ScheduleModel.updateSchedule(idSchedule, req.user.id, idBus, idRoute, departureTime, arriveTime)
+            const result = await ScheduleModel.getScheduleById(idSchedule)
+            const data = {
+              success: true,
+              result
+            }
+            res.send(data)
+          } else {
+            const data = {
+              success: false,
+              msg: 'id bus / id route cant found'
+            }
+            res.send(data)
+          }
+        } else {
+          const data = {
+            success: false,
+            msg: 'Enter idRoute, idBus, departureTime, ArriveTime'
+          }
+          res.send(data)
+        }
+      } else {
+        const data = {
+          success: false,
+          msg: 'Your id schedule not found'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'U cant access this feature'
+      }
+      res.send(data)
+    }
+  },
+  deleteSchedule: async function (req, res) {
+    if (req.user.roleId === 1) {
+      const { idSchedule } = req.body
+      const checkSchedule = await ScheduleModel.getScheduleById(idSchedule)
+      console.log(checkSchedule)
+      if (checkSchedule) {
+        const deleteSchedule = ScheduleModel.deleteSchedule(idSchedule, req.user.id)
+        if (deleteSchedule) {
+          const data = {
+            success: true,
+            msg: 'Schedule deleted'
+          }
+          res.send(data)
+        } else {
+          const data = {
+            success: false,
+            msg: 'U cant delete schedule from anothe admin'
+          }
+          res.send(data)
+        }
+
+      } else {
+        const data = {
+          success: false,
+          msg: 'Id Schedule cant be found'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'U cant access this feature'
+      }
+      res.send(data)
+    }
   }
 }

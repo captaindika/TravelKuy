@@ -1,6 +1,7 @@
 const UserModel = require('../models/Users')
 const AuthModel = require('../models/Auth')
 const AgenModel = require('../models/Agent')
+const UserdModel = require('../models/UserDetails')
 
 // package
 const bcrypt = require('bcryptjs')
@@ -110,6 +111,41 @@ module.exports = {
       const data = {
         success: false,
         msg: 'There is no data can be deleted'
+      }
+      res.send(data)
+    }
+  },
+  getScheduleForUser: async function (req, res) {
+    const result = await UserModel.getAllSchedules()
+    if (result) {
+      const data = {
+        success: true,
+        result
+      }
+      res.send(data)
+    } else {
+      const data = {
+        success: false,
+        msg: 'Data not found'
+      }
+      res.send(data)
+    }
+  },
+  topUp: async function (req, res) {
+    let { balance } = req.body
+    if (balance) {
+      await UserdModel.topUp(req.user.id, balance)
+      const result = await UserdModel.getUserDetailByIdUser(req.user.id)
+      const data = {
+        success: true,
+        msg: 'Top up success',
+        result
+      }
+      res.send(data)
+    } else {
+      const data = {
+        success: false,
+        msg: 'Enter balance'
       }
       res.send(data)
     }

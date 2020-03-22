@@ -91,15 +91,20 @@ module.exports = {
       })
     })
   },
-  topUp: function (id, balance) {
+  topUp: function (idUser, balance) {
     const table = 'user_details'
-    const sql = `UPDATE ${table} SET balance=${balance} WHERE id=${id}`
+    const query = `UPDATE ${table} SET balance = balance + ${balance} WHERE id_user=${idUser}`
+    console.log(query)
     return new Promise(function (resolve, reject) {
-      db.query(sql, function (err, results, fields) {
+      db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)
         } else {
-          resolve(results[0].total)
+          if (results.affectedRows) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
         }
       })
     })

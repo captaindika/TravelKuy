@@ -119,5 +119,20 @@ module.exports = {
         }
       })
     })
+  },
+  getAllSchedules: function () {
+    const query = `SELECT schedules.id, busses.name, routes.start, routes.end, schedules.price, schedules.departure_time, schedules.arrive_time
+                  FROM ((schedules
+                  INNER JOIN routes ON schedules.id_route = routes.id)
+                  INNER JOIN busses ON schedules.id_bus = busses.id)`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results)
+        }
+      })
+    })
   }
 }

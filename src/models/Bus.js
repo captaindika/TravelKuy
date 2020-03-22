@@ -134,5 +134,23 @@ module.exports = {
         }
       })
     })
+  },
+  updateBussSeat: function (id) {
+    return new Promise(function (resolve, reject) {
+      const table = 'busses'
+      const query = `UPDATE ${table} SET bus_seat=bus_seat-1 WHERE id=${id}`
+      console.log(query)
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(results)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
   }
 }

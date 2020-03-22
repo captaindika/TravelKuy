@@ -89,6 +89,53 @@ module.exports = {
         }
       })
     })
+  },
+  countIdSchedules: function (idSchedule) {
+    const table = 'transactions'
+    const query = `SELECT COUNT (*) AS total FROM ${table} WHERE id_schedule=${idSchedule}`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results[0].total)
+        }
+      })
+    })
+  },
+  getScheduleForSeat: function (idSchedule) {
+    const query = `SELECT schedules.id, busses.id, busses.bus_seat
+                  FROM (schedules
+                  INNER JOIN busses ON schedules.id_bus = busses.id) WHERE schedules.id = ${idSchedule}`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.length) {
+            resolve(results[0])
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  deleteSchedule: function (idSchedule) {
+    const table = 'schedules'
+    const query = `DELETE FROM ${table} WHERE id = ${idSchedule}`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
   }
-  // getIdScheduleByDate:
 }

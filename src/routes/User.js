@@ -23,4 +23,8 @@ User.patch('/update', AuthToken.checkToken, UserdControl.updateUserDetail)
 User.patch('/topup', AuthToken.checkToken, UserControl.topUp)
 // User.post('/add-agent', AuthToken.checkToken, UserControl.createAgent)
 
+// test count
+User.get('/count-schedule', UserControl.countSchedule)
+User.get('/count-seat', UserControl.countSeat)
+
 module.exports = User

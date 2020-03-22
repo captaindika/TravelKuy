@@ -3,6 +3,8 @@ const UserModel = require('../models/Users')
 const AgenModel = require('../models/Agent')
 const UserdModel = require('../models/UserDetails')
 const ScheduleModel = require('../models/Schedule')
+const TransactionModel = require('../models/Transaction')
+const BussModel = require('../models/Bus')
 
 // package
 const bcrypt = require('bcryptjs')
@@ -159,23 +161,33 @@ module.exports = {
       const infoSchedule = await ScheduleModel.getScheduleById(idSchedule)
       const infoUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
       newBalance = infoUserd.balance - infoSchedule.price
-      console.log(newBalance)
-      if (newBalance > 0) {
+      const infoBus = await TransactionModel.getScheduleForSeat(idSchedule)
+      if (infoBus.bus_seat > 0 && newBalance >= 0) {
         await UserdModel.updateBalance(req.user.id, newBalance)
+        await BussModel.updateBussSeat(infoBus.id)
         await UserModel.Transaction(idSchedule, req.user.id)
         const newUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
         const data = {
           success: true,
-          msg: 'Lunas',
+          msg: 'transaction succes',
           newUserd
         }
         res.send(data)
       } else {
-        const data = {
-          success: true,
-          msg: 'Ngutang'
+        if (infoBus.bus_seat === 0) {
+          await TransactionModel.deleteSchedule(idSchedule)
+          const data = {
+            success: true,
+            msg: 'Bus seat is full, schedule was deleted'
+          }
+          res.send(data)
+        } else {
+          const data = {
+            success: false,
+            msg: 'Please top up your balance'
+          }
+          res.send(data)
         }
-        res.send(data)
       }
     } else {
       const data = {
@@ -184,5 +196,26 @@ module.exports = {
       }
       res.send(data)
     }
+  },
+  countSchedule: async function (req, res) {
+    const { idSchedule } = req.body
+    if (idSchedule) {
+      const info = await TransactionModel.countIdSchedules(idSchedule)
+      console.log(info)
+      const data = {
+        info
+      }
+      res.send(data)
+    } else {
+      const data = {
+        msg: 'kosong'
+      }
+      res.send(data)
+    }
+  },
+  countSeat: async function (req, res) {
+    const { idSchedule } = req.body
+    const info = await TransactionModel.getScheduleForSeat(idSchedule)
+    console.log(info.bus_seat)
   }
 }

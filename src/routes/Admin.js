@@ -5,6 +5,7 @@ const AdminControl = require('../controllers/Admin')
 const TokenMid = require('../middleware/Auth')
 const AuthControl = require('../controllers/Auth')
 const UserdControl = require('../controllers/UserDetail')
+const AgenControl = require('../controllers/Agent')
 
 Admin.post('/create', AdminControl.createAdmin)
 Admin.post('/login', AuthControl.login)
@@ -29,8 +30,10 @@ Admin.post('/route/add', TokenMid.checkToken, AdminControl.createRoutes)
 // delete
 Admin.delete('/route/delete', TokenMid.checkToken, AdminControl.deleteRoutes)
 Admin.delete('/agent/delete', TokenMid.checkToken, AdminControl.deleteAgent)
+Admin.delete('/bus/delete', TokenMid.checkToken, AgenControl.deleteBuss)
 
 // update
 Admin.patch('/route/update', TokenMid.checkToken, AdminControl.updateRoutes)
 Admin.patch('/agent/update', TokenMid.checkToken, AdminControl.updateAgent)
+Admin.patch('/bus/update', TokenMid.checkToken, AdminControl.updateBus)
 module.exports = Admin

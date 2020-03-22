@@ -13,10 +13,28 @@ module.exports = {
       })
     })
   },
-  updateBuss: function (id, idAgent, name, size) {
+  updateBuss: function (id, name, size) {
     return new Promise(function (resolve, reject) {
       const table = 'busses'
-      const query = `UPDATE ${table} SET name='${name}', bus_seat=${size} WHERE id=${id} AND id_agent=${idAgent}`
+      const query = `UPDATE ${table} SET name='${name}', bus_seat=${size} WHERE id=${id}`
+      console.log(query)
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(results)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
+  updateBussAdmin: function (id, idAgent, name, size) {
+    return new Promise(function (resolve, reject) {
+      const table = 'busses'
+      const query = `UPDATE ${table} SET id_agent=${idAgent}, name='${name}', bus_seat=${size} WHERE id=${id}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {

@@ -49,8 +49,7 @@ module.exports = {
       if (pastBus) {
         nameCar = nameCar || pastBus.name
         seat = seat || pastBus.bus_seat
-        const infoAgent = await AgentModel.findAgentByIdUser(req.user.id) // get id agent by user_id
-        await BusModel.updateBuss(idBuss, infoAgent.id, nameCar, seat)
+        await BusModel.updateBuss(idBuss, nameCar, seat)
         const newCar = await BusModel.findBusById(idBuss)
         const data = {
           success: true,

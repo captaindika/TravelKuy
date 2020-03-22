@@ -186,6 +186,43 @@ module.exports = {
       res.send(data)
     }
   },
+  updateBus: async function (req, res) {
+    const { idAgent, idBuss, name, size } = req.body
+    if (req.user.roleId === 1) {
+      const infoAgent = await AgentModel.findAgentById(idAgent)
+      if (infoAgent) {
+        const infoBuss = await BussModel.findBusById(idBuss)
+        if (infoBuss) {
+          await BussModel.updateBussAdmin(idBuss, idAgent, name, size)
+          const info = await BussModel.findBusById(idBuss)
+          const data = {
+            success: true,
+            msg: 'Bus updated',
+            info
+          }
+          res.send(data)
+        } else {
+          const data = {
+            success: false,
+            msg: 'Id buss not found, check it again'
+          }
+          res.send(data)
+        }
+      } else {
+        const data = {
+          success: false,
+          msg: 'Id agent not found, register first'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'U cant access this feature'
+      }
+      res.send(data)
+    }
+  },
   readBus: async function (req, res) {
     let { page, limit, search, sort } = req.query
     page = parseInt(page) || 1

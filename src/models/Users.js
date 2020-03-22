@@ -122,7 +122,7 @@ module.exports = {
     })
   },
   getAllSchedules: function () {
-    const query = `SELECT schedules.id, busses.name, busses.bus_seat, routes.start, routes.end, schedules.price, schedules.departure_time, schedules.arrive_time, schedules.departure_date
+    const query = `SELECT schedules.id, busses.car_name, busses.bus_seat, routes.start, routes.end, schedules.price, schedules.departure_time, schedules.arrive_time, schedules.departure_date
                   FROM ((schedules
                   INNER JOIN routes ON schedules.id_route = routes.id)
                   INNER JOIN busses ON schedules.id_bus = busses.id)`

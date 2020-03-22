@@ -1,12 +1,12 @@
 const UserModel = require('../models/Users')
-const AuthModel = require('../models/Auth')
+// const AuthModel = require('../models/Auth')
 const AgenModel = require('../models/Agent')
 const UserdModel = require('../models/UserDetails')
 const ScheduleModel = require('../models/Schedule')
 
 // package
 const bcrypt = require('bcryptjs')
-const uuid = require('uuid').v4
+// const uuid = require('uuid').v4
 
 module.exports = {
   createAgent: async function (req, res) {
@@ -79,16 +79,17 @@ module.exports = {
   },
   update: async function (req, res) {
     const picture = (req.file && req.file.filename) || null
-    const { id } = req.params
     const { username, password } = req.body
+    const id = req.user.id
     const encryptedPass = bcrypt.hashSync(password)
     const results = await UserModel.updateUser(id, picture, username, encryptedPass)
+    const infoUser = await UserModel.getUserById(id)
     delete req.body.password
     if (results) {
       const data = {
         success: true,
-        msg: `User with id ${id} has been updated`,
-        data: { id, ...req.body }
+        msg: `User with id ${req.user.id} has been updated`,
+        infoUser
       }
       res.send(data)
     } else {

@@ -18,7 +18,7 @@ module.exports = {
       res.send(data)
     }
   },
-  updateUserDetail: async function(req, res) {
+  updateUserDetail: async function (req, res) {
     const info = await UserdModel.getUserDetailByIdUser(req.user.id)
     // console.log(info.id_user)
     const { name, email, phone } = req.body

@@ -1,5 +1,5 @@
 const Admin = require('express').Router()
-const multer = require('multer')
+// const multer = require('multer')
 const UserControl = require('../controllers/User')
 const AdminControl = require('../controllers/Admin')
 const TokenMid = require('../middleware/Auth')

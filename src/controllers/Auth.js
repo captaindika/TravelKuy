@@ -10,6 +10,7 @@ const uuid = require('uuid').v4
 module.exports = {
   register: async function (req, res) {
     const { username, password, name, phone, email } = req.body
+    const picture = (req.file && req.file.filename) || null
     const checkUser = await AuthModel.checkUsername(username)
     if (checkUser !== 0) {
       const data = {
@@ -19,7 +20,7 @@ module.exports = {
       res.send(data)
     } else {
       const encrypPass = bcrypt.hashSync(password)
-      const results = await UserModel.createUser(null, username, encrypPass)
+      const results = await UserModel.createUser(picture, username, encrypPass)
       const info = await AuthModel.getUserByUsername(username)
       await UserdModel.createUserDetail(info.id, name, email, phone, 0)
       if (results) {

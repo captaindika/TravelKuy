@@ -71,7 +71,8 @@ module.exports = {
     const table = 'users'
     picture = typeof picture === 'string' ? `'${picture}'` : picture
     return new Promise(function (resolve, reject) {
-      const query = `UPDATE ${table} SET picture =${picture} username=${username}, password=${password} WHERE id=${id}`
+      const query = `UPDATE ${table} SET picture =${picture}, username='${username}', password='${password}' WHERE id=${id}`
+      console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)

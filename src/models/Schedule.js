@@ -121,9 +121,5 @@ module.exports = {
         }
       })
     })
-  },
-  getScheduleForUser: async function() {
-    const table = 'schedules'
-    const query = `SELECT `
   }
 }

@@ -109,7 +109,7 @@ module.exports = {
       })
     })
   },
-  updateBalance: function(idUser, balance) {
+  updateBalance: function (idUser, balance) {
     const table = 'user_details'
     const query = `UPDATE ${table} SET balance = ${balance} WHERE id_user=${idUser}`
     return new Promise(function (resolve, reject) {

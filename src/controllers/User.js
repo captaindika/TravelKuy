@@ -2,6 +2,7 @@ const UserModel = require('../models/Users')
 const AuthModel = require('../models/Auth')
 const AgenModel = require('../models/Agent')
 const UserdModel = require('../models/UserDetails')
+const ScheduleModel = require('../models/Schedule')
 
 // package
 const bcrypt = require('bcryptjs')
@@ -132,7 +133,7 @@ module.exports = {
     }
   },
   topUp: async function (req, res) {
-    let { balance } = req.body
+    const { balance } = req.body
     if (balance) {
       await UserdModel.topUp(req.user.id, balance)
       const result = await UserdModel.getUserDetailByIdUser(req.user.id)
@@ -146,6 +147,39 @@ module.exports = {
       const data = {
         success: false,
         msg: 'Enter balance'
+      }
+      res.send(data)
+    }
+  },
+  Transaction: async function (req, res) {
+    const { idSchedule } = req.body
+    let newBalance = 0
+    if (idSchedule) {
+      const infoSchedule = await ScheduleModel.getScheduleById(idSchedule)
+      const infoUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
+      newBalance = infoUserd.balance - infoSchedule.price
+      console.log(newBalance)
+      if (newBalance > 0) {
+        await UserdModel.updateBalance(req.user.id, newBalance)
+        await UserModel.Transaction(idSchedule, req.user.id)
+        const newUserd = await UserdModel.getUserDetailByIdUser(req.user.id)
+        const data = {
+          success: true,
+          msg: 'Lunas',
+          newUserd
+        }
+        res.send(data)
+      } else {
+        const data = {
+          success: true,
+          msg: 'Ngutang'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'Enter id Schedule'
       }
       res.send(data)
     }

@@ -134,5 +134,19 @@ module.exports = {
         }
       })
     })
+  },
+  Transaction: function (idSchedule, idUser) {
+    const table = 'transactions'
+    const query = `INSERT INTO ${table} (id_user,id_schedule) VALUES (${idUser},${idSchedule})`
+    console.log(query)
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results.insertId)
+        }
+      })
+    })
   }
 }

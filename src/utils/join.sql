@@ -7,3 +7,7 @@ SELECT busses.name, routes.start, routes.end, schedules.price, schedules.departu
 FROM ((schedules
 INNER JOIN routes ON schedules.id_route = routes.id)
 INNER JOIN busses ON schedules.id_bus = busses.id)
+
+select transactions.id_user, schedules.price, busses.name
+from transactions, schedules, busses
+where transactions.id = 3 and transactions.id_schedule = schedules.id and schedules.id_bus = busses.id

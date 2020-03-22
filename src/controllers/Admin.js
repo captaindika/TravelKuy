@@ -505,7 +505,7 @@ module.exports = {
   },
   createSchedules: async function (req, res) {
     if (req.user.roleId === 1) {
-      let { idBus, idRoute, price, departureTime, arriveTime } = req.body
+      let { idBus, idRoute, price, departureTime, arriveTime, departureDate } = req.body
       const infoBus = await BussModel.findBusById(idBus)
       const infoRoute = await RouteModel.getRouteById(idRoute)
       // Define price on your own definition by route
@@ -523,7 +523,7 @@ module.exports = {
           price = price || 150000
       }
       if (infoBus && infoRoute) {
-        const results = await ScheduleModel.createSchedule(req.user.id, idBus, idRoute, price, departureTime, arriveTime)
+        const results = await ScheduleModel.createSchedule(req.user.id, idBus, idRoute, price, departureTime, arriveTime, departureDate)
         if (results) {
           const data = {
             success: true,
@@ -570,14 +570,14 @@ module.exports = {
   },
   updateSchedule: async function (req, res) {
     if (req.user.roleId === 1) {
-      const { idSchedule, idRoute, idBus, departureTime, arriveTime } = req.body
+      const { idSchedule, idRoute, idBus, departureTime, arriveTime, departureDate } = req.body
       const checkIdSchedule = await ScheduleModel.getScheduleById(idSchedule)
       const checkIdBus = await BussModel.findBusById(idBus)
       const checkRoute = await RouteModel.getRouteById(idRoute)
       if (checkIdSchedule) {
-        if (idRoute && idBus && departureTime && arriveTime) {
+        if (idRoute && idBus && departureTime && arriveTime && departureDate) {
           if (checkIdBus && checkRoute) {
-            await ScheduleModel.updateSchedule(idSchedule, req.user.id, idBus, idRoute, departureTime, arriveTime)
+            await ScheduleModel.updateSchedule(idSchedule, req.user.id, idBus, idRoute, departureTime, arriveTime, departureDate)
             const result = await ScheduleModel.getScheduleById(idSchedule)
             const data = {
               success: true,
@@ -594,7 +594,7 @@ module.exports = {
         } else {
           const data = {
             success: false,
-            msg: 'Enter idRoute, idBus, departureTime, ArriveTime'
+            msg: 'Enter idRoute, idBus, departureTime, ArriveTime, departureDate'
           }
           res.send(data)
         }

@@ -1,10 +1,10 @@
 const db = require('../utils/db')
 
 module.exports = {
-  createSchedule: function (idUser, idBus, idRoute, price, departureTime, arriveTime) {
+  createSchedule: function (idUser, idBus, idRoute, price, departureTime, arriveTime, departureDate) {
     const table = 'schedules'
-    const query = `INSERT INTO ${table} (id_admin, id_bus, id_route, price, departure_time, arrive_time)
-    VALUES (${idUser}, ${idBus},${idRoute}, ${price},'${departureTime}', '${arriveTime}')`
+    const query = `INSERT INTO ${table} (id_admin, id_bus, id_route, price, departure_time, arrive_time, departure_date)
+    VALUES (${idUser}, ${idBus},${idRoute}, ${price},'${departureTime}', '${arriveTime}', '${departureDate}')`
     console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
@@ -88,11 +88,11 @@ module.exports = {
       })
     })
   },
-  updateSchedule: function (id, idAdmin, idBus, idRoute, departureTime, arriveTime) {
+  updateSchedule: function (id, idAdmin, idBus, idRoute, departureTime, arriveTime, departureDate) {
     return new Promise(function (resolve, reject) {
       const table = 'schedules'
       const query = `UPDATE ${table} SET id_bus=${idBus}, id_route=${idRoute},
-      departure_time='${departureTime}', arrive_time='${arriveTime}' WHERE id=${id} AND id_admin = ${idAdmin}`
+      departure_time='${departureTime}', arrive_time='${arriveTime}', departure_date='${departureDate}' WHERE id=${id} AND id_admin = ${idAdmin}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {

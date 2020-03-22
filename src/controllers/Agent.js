@@ -72,5 +72,30 @@ module.exports = {
       }
       res.send(data)
     }
+  },
+  deleteBuss: async function (req, res) {
+    const { idBuss } = req.body
+    if (req.user.roleId === 2 || req.user.roleId === 1) {
+      const bus = await BusModel.deleteBuss(idBuss)
+      if (bus) {
+        const data = {
+          success: true,
+          msg: 'Your bus deleted'
+        }
+        res.send(data)
+      } else {
+        const data = {
+          success: false,
+          msg: 'Your id bus is not found'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'You cannot access this feature'
+      }
+      res.send(data)
+    }
   }
 }

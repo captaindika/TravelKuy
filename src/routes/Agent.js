@@ -10,5 +10,6 @@ Agent.patch('/update', AuthToken.checkToken, UserdControl.updateUserDetail)
 Agent.post('/bus/add', AuthToken.checkToken, AgenControl.createBus)
 Agent.get('/bus', AuthToken.checkToken, AgenControl.getBusses)
 Agent.patch('/bus/update', AuthToken.checkToken, AgenControl.updateBusses)
+Agent.delete('/bus/delete', AuthToken.checkToken, AgenControl.deleteBuss)
 
 module.exports = Agent

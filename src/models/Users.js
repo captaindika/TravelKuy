@@ -125,7 +125,7 @@ module.exports = {
     const query = `SELECT schedules.id, busses.car_name, busses.bus_seat, routes.start, routes.end, schedules.price, schedules.departure_time, schedules.arrive_time, schedules.departure_date
                   FROM ((schedules
                   INNER JOIN routes ON schedules.id_route = routes.id)
-                  INNER JOIN busses ON schedules.id_bus = busses.id)`
+                  INNER JOIN busses ON schedules.id_bus = busses.id) ORDER BY schedules.id ASC`
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {

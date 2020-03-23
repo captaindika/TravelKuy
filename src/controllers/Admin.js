@@ -333,15 +333,9 @@ module.exports = {
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    search = (sort && { key, value }) || { key: 'id', value: '' }
+    search = (sort && { key, value }) || { key: 'price', value: '' }
     const conditions = { page, perPage: limit, search, sort }
-    if (req.user.roleId !== 1) {
-      const data = {
-        success: false,
-        msg: 'You\'re not allowed to access this feature'
-      }
-      res.send(data)
-    }
+
     const results = await ScheduleModel.getAllSchedules(conditions)
     conditions.totalData = await ScheduleModel.getTotalSchedules(conditions)
     conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)

@@ -55,7 +55,7 @@ module.exports = {
     let { page, perPage, sort, search } = conditions
     page = page || 1
     perPage = perPage || 5
-    sort = sort || { key: 'id', value: 1 } // value => 0 untuk ascending, 1 descending
+    sort = sort || { key: 'id', value: 1 } // value => 0 untuk descending, 1 ascending
     search = search || { key: 'name', value: '' }
     const table = 'schedules'
     return new Promise(function (resolve, reject) {

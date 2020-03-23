@@ -18,6 +18,7 @@ app.use('/auth', AuthRouter) // first register here
 app.use('/admin', AdminRouter)
 app.use('/user', UserRouter)
 app.use('/agent', AgentRouter)
+app.use('/file', express.static('files'))
 
 // create migration table
 

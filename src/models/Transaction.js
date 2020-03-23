@@ -140,7 +140,7 @@ module.exports = {
      from transactions, schedules, busses, user_details, routes 
      where transactions.id_schedule = schedules.id and schedules.id_bus = busses.id 
      and transactions.id_user = user_details.id_user and schedules.id_route = routes.id 
-     AND transactions.id_user = 18`
+     AND transactions.id_user = ${idUser}`
     console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {

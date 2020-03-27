@@ -43,7 +43,7 @@ function filterPicture (req, res, next) {
       if (req.file === undefined) {
         res.send('Error: no file selected')
       } else {
-        res.send('File uploaded')
+        next()
       }
     }
   })

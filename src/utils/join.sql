@@ -19,3 +19,12 @@ schedules.id_bus = busses.id and
 transactions.id_user = user_details.id_user and
 schedules.id_route = routes.id AND
 id_user = 18
+
+SELECT user_details.name, routes.start, routes.end, busses.car_name, schedules.price, schedules.departure_time, schedules.arrive_time, schedules.departure_date
+FROM transactions
+JOIN users ON transactions.id_user = users.id
+JOIN user_details ON user_details.id_user = users.id
+JOIN schedules ON transactions.id_schedule = schedules.id
+JOIN busses ON schedules.id_bus = busses.id
+JOIN routes ON schedules.id_route = routes.id
+

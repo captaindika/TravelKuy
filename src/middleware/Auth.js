@@ -19,7 +19,7 @@ module.exports = {
         }
       } catch (err) {
         const data = {
-          success: true,
+          success: false,
           msg: err.message
         }
         res.send(data)

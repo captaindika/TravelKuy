@@ -383,12 +383,20 @@ module.exports = {
     res.send(data)
   },
   readTransactionDetail: async function (req, res) {
-    const result = await TransactionModel.getTransactionDetail
-    const data = {
-      success: true,
-      data: result
+    if (req.user.roleId === 1) {
+      const results = await TransactionModel.getTransactionDetail()
+      const data = {
+        success: true,
+        data: results
+      }
+      res.send(data)
+    } else {
+      const data = {
+        success: false,
+        msg: 'u cant access this feature'
+      }
+      res.send(data)
     }
-    res.send(data)
   },
   createRoutes: function (req, res) {
     const { start, end } = req.body

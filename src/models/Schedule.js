@@ -88,11 +88,11 @@ module.exports = {
       })
     })
   },
-  updateSchedule: function (id, idAdmin, idBus, idRoute, departureTime, arriveTime, departureDate) {
+  updateSchedule: function (id, idAdmin, idBus, idRoute, departureTime, arriveTime, departureDate, price) {
     return new Promise(function (resolve, reject) {
       const table = 'schedules'
       const query = `UPDATE ${table} SET id_bus=${idBus}, id_route=${idRoute},
-      departure_time='${departureTime}', arrive_time='${arriveTime}', departure_date='${departureDate}' WHERE id=${id} AND id_admin = ${idAdmin}`
+      departure_time='${departureTime}', arrive_time='${arriveTime}', departure_date='${departureDate}', price = ${price} WHERE id=${id} AND id_admin = ${idAdmin}`
       console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {

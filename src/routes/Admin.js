@@ -13,7 +13,7 @@ Admin.post('/login', AuthControl.login)
 // get
 Admin.get('/users', TokenMid.checkToken, UserControl.read)
 Admin.get('/agent', TokenMid.checkToken, AdminControl.readAgent)
-Admin.get('/agent/userId', TokenMid.checkToken, AdminControl.getAgentByUser)
+Admin.get('/agent/userId/:id', TokenMid.checkToken, AdminControl.getAgentByUser)
 Admin.get('/bus', TokenMid.checkToken, AdminControl.readBus)
 Admin.get('/user-detail', TokenMid.checkToken, AdminControl.readUserDetail)
 Admin.get('/route', TokenMid.checkToken, AdminControl.readRoutes)
@@ -32,13 +32,13 @@ Admin.post('/schedule/add', TokenMid.checkToken, AdminControl.createSchedules)
 
 // delete
 Admin.delete('/route/delete/:id', TokenMid.checkToken, AdminControl.deleteRoutes)
-Admin.delete('/agent/delete', TokenMid.checkToken, AdminControl.deleteAgent)
+Admin.delete('/agent/delete/:id', TokenMid.checkToken, AdminControl.deleteAgent)
 Admin.delete('/bus/delete', TokenMid.checkToken, AgenControl.deleteBuss)
-Admin.delete('/schedule/delete', TokenMid.checkToken, AdminControl.deleteSchedule)
+Admin.delete('/schedule/delete/:id', TokenMid.checkToken, AdminControl.deleteSchedule)
 
 // update
 Admin.patch('/route/update/:id', TokenMid.checkToken, AdminControl.updateRoutes)
-Admin.patch('/agent/update', TokenMid.checkToken, AdminControl.updateAgent)
+Admin.patch('/agent/update/:id', TokenMid.checkToken, AdminControl.updateAgent)
 Admin.patch('/bus/update', TokenMid.checkToken, AdminControl.updateBus)
-Admin.patch('/schedule/update', TokenMid.checkToken, AdminControl.updateSchedule)
+Admin.patch('/schedule/update/:id', TokenMid.checkToken, AdminControl.updateSchedule)
 module.exports = Admin

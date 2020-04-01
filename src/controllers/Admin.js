@@ -33,10 +33,10 @@ module.exports = {
     res.send(data)
   },
   deleteAgent: async function (req, res) {
-    const { idAgent } = req.body
-    if (idAgent) {
+    const { id } = req.params
+    if (id) {
       if (req.user.roleId === 1) {
-        if (await AgentModel.deleteAgentById(idAgent)) {
+        if (await AgentModel.deleteAgentById(id)) {
           const data = {
             success: true,
             msg: 'Agent has been removed'
@@ -65,7 +65,7 @@ module.exports = {
     }
   },
   getAgentByUser: async function (req, res) {
-    const { id } = req.body
+    const { id } = req.params
     if (req.user.roleId === 1) {
       const info = await AgentModel.findAgentByIdUser(id)
       if (info) {
@@ -419,7 +419,6 @@ module.exports = {
   },
   deleteRoutes: function (req, res) {
     const { id } = req.params
-    console.log(id)
     if (req.user.roleId === 1) {
       if (RouteModel.deleteRoute(id)) {
         const data = {
@@ -477,14 +476,15 @@ module.exports = {
     // RouteModel.updateRoute
   },
   updateAgent: async function (req, res) {
-    let { idAgent, idUser, name } = req.body
+    let { idUser, name } = req.body
+    const { id } = req.params
     const a = await AgentModel.checkUserHasAgent(idUser)
     if (req.user.roleId === 1) {
       if (idUser) {
         if (a === 0) {
           name = name || 'Agent'
           AdminModel.createAgent(idUser)
-          AgentModel.deleteAgentById(idAgent) // cause on delete cascade so i delete and make new one
+          AgentModel.deleteAgentById(id) // cause on delete cascade so i delete and make new one
           AgentModel.createAgent(idUser, name)
           const data = {
             success: true,
@@ -492,9 +492,9 @@ module.exports = {
           }
           res.send(data)
         } else {
-          const info = await AgentModel.findAgentById(idAgent)
+          const info = await AgentModel.findAgentById(id)
           name = name || info.name
-          AgentModel.updateAgent(idAgent, idUser, name)
+          AgentModel.updateAgent(id, idUser, name)
           const data = {
             success: true,
             msg: 'agent updated'
@@ -583,15 +583,16 @@ module.exports = {
   },
   updateSchedule: async function (req, res) {
     if (req.user.roleId === 1) {
-      const { idSchedule, idRoute, idBus, departureTime, arriveTime, departureDate } = req.body
-      const checkIdSchedule = await ScheduleModel.getScheduleById(idSchedule)
+      const { idRoute, idBus, departureTime, arriveTime, departureDate, price } = req.body
+      const { id } = req.params
+      const checkIdSchedule = await ScheduleModel.getScheduleById(id)
       const checkIdBus = await BussModel.findBusById(idBus)
       const checkRoute = await RouteModel.getRouteById(idRoute)
       if (checkIdSchedule) {
         if (idRoute && idBus && departureTime && arriveTime && departureDate) {
           if (checkIdBus && checkRoute) {
-            await ScheduleModel.updateSchedule(idSchedule, req.user.id, idBus, idRoute, departureTime, arriveTime, departureDate)
-            const result = await ScheduleModel.getScheduleById(idSchedule)
+            await ScheduleModel.updateSchedule(id, req.user.id, idBus, idRoute, departureTime, arriveTime, departureDate, price)
+            const result = await ScheduleModel.getScheduleById(id)
             const data = {
               success: true,
               result
@@ -628,11 +629,11 @@ module.exports = {
   },
   deleteSchedule: async function (req, res) {
     if (req.user.roleId === 1) {
-      const { idSchedule } = req.body
-      const checkSchedule = await ScheduleModel.getScheduleById(idSchedule)
+      const { id } = req.params
+      const checkSchedule = await ScheduleModel.getScheduleById(id)
       console.log(checkSchedule)
       if (checkSchedule) {
-        const deleteSchedule = ScheduleModel.deleteSchedule(idSchedule, req.user.id)
+        const deleteSchedule = ScheduleModel.deleteSchedule(id, req.user.id)
         if (deleteSchedule) {
           const data = {
             success: true,

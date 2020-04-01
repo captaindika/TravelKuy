@@ -382,6 +382,14 @@ module.exports = {
     }
     res.send(data)
   },
+  readTransactionDetail: async function (req, res) {
+    const result = await TransactionModel.getTransactionDetail
+    const data = {
+      success: true,
+      data: result
+    }
+    res.send(data)
+  },
   createRoutes: function (req, res) {
     const { start, end } = req.body
     const idUser = req.user.id

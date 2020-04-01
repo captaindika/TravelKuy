@@ -151,5 +151,24 @@ module.exports = {
         }
       })
     })
+  },
+  getTransactionDetail: function () {
+    const query = `SELECT user_details.name, routes.start, routes.end, busses.car_name, schedules.price, schedules.departure_time, schedules.arrive_time, schedules.departure_date
+    FROM transactions
+    JOIN users ON transactions.id_user = users.id
+    JOIN user_details ON user_details.id_user = users.id
+    JOIN schedules ON transactions.id_schedule = schedules.id
+    JOIN busses ON schedules.id_bus = busses.id
+    JOIN routes ON schedules.id_route = routes.id`
+    return new Promise(function (resolve, reject) {
+      console.log(query)
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results)
+        }
+      })
+    })
   }
 }

@@ -20,6 +20,7 @@ Admin.get('/route', TokenMid.checkToken, AdminControl.readRoutes)
 Admin.get('/schedule', TokenMid.checkToken, AdminControl.readSchedules)
 Admin.get('/schedule-by-admin', TokenMid.checkToken, AdminControl.getScheduleAdminMade)
 Admin.get('/transaction', TokenMid.checkToken, AdminControl.readTransaction)
+Admin.get('/transaction-detail', TokenMid.checkToken, AdminControl.readTransactionDetail)
 Admin.get('/detail', TokenMid.checkToken, UserdControl.getUserDetailByIdUser)
 
 // create

@@ -73,9 +73,9 @@ module.exports = {
     }
   },
   deleteBuss: async function (req, res) {
-    const { idBuss } = req.body
+    const { id } = req.params
     if (req.user.roleId === 2 || req.user.roleId === 1) {
-      const bus = await BusModel.deleteBuss(idBuss)
+      const bus = await BusModel.deleteBuss(id)
       if (bus) {
         const data = {
           success: true,

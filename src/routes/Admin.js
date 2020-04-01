@@ -33,12 +33,12 @@ Admin.post('/schedule/add', TokenMid.checkToken, AdminControl.createSchedules)
 // delete
 Admin.delete('/route/delete/:id', TokenMid.checkToken, AdminControl.deleteRoutes)
 Admin.delete('/agent/delete/:id', TokenMid.checkToken, AdminControl.deleteAgent)
-Admin.delete('/bus/delete', TokenMid.checkToken, AgenControl.deleteBuss)
+Admin.delete('/bus/delete/:id', TokenMid.checkToken, AgenControl.deleteBuss)
 Admin.delete('/schedule/delete/:id', TokenMid.checkToken, AdminControl.deleteSchedule)
 
 // update
 Admin.patch('/route/update/:id', TokenMid.checkToken, AdminControl.updateRoutes)
 Admin.patch('/agent/update/:id', TokenMid.checkToken, AdminControl.updateAgent)
-Admin.patch('/bus/update', TokenMid.checkToken, AdminControl.updateBus)
+Admin.patch('/bus/update/:id', TokenMid.checkToken, AdminControl.updateBus)
 Admin.patch('/schedule/update/:id', TokenMid.checkToken, AdminControl.updateSchedule)
 module.exports = Admin

@@ -187,14 +187,15 @@ module.exports = {
     }
   },
   updateBus: async function (req, res) {
-    const { idAgent, idBuss, name, size } = req.body
+    const { idAgent, name, size } = req.body
+    const { id } = req.params
     if (req.user.roleId === 1) {
       const infoAgent = await AgentModel.findAgentById(idAgent)
       if (infoAgent) {
-        const infoBuss = await BussModel.findBusById(idBuss)
+        const infoBuss = await BussModel.findBusById(id)
         if (infoBuss) {
-          await BussModel.updateBussAdmin(idBuss, idAgent, name, size)
-          const info = await BussModel.findBusById(idBuss)
+          await BussModel.updateBussAdmin(id, idAgent, name, size)
+          const info = await BussModel.findBusById(id)
           const data = {
             success: true,
             msg: 'Bus updated',

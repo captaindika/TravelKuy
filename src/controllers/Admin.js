@@ -418,9 +418,10 @@ module.exports = {
     }
   },
   deleteRoutes: function (req, res) {
-    const { idRoute } = req.body
+    const { id } = req.params
+    console.log(id)
     if (req.user.roleId === 1) {
-      if (!RouteModel.deleteRoute(idRoute)) {
+      if (RouteModel.deleteRoute(id)) {
         const data = {
           success: true,
           msg: 'Route has been deleted'
@@ -444,14 +445,16 @@ module.exports = {
   updateRoutes: async function (req, res) {
     if (req.user.roleId === 1) {
       // console.log(req.user)
-      let { idRoute, start, end } = req.body
-      const info = await RouteModel.getRouteById(idRoute)
+      let { start, end } = req.body
+      const { id } = req.params
+      console.log(id)
+      const info = await RouteModel.getRouteById(id)
       console.log(info)
       start = start || info.start
       end = end || info.end
-      const results = await RouteModel.updateRoute(idRoute, start, end)
+      const results = await RouteModel.updateRoute(id, start, end)
       if (results) {
-        const info = await RouteModel.getRouteById(idRoute)
+        const info = await RouteModel.getRouteById(id)
         const data = {
           success: true,
           info

@@ -31,13 +31,13 @@ Admin.post('/schedule/add', TokenMid.checkToken, AdminControl.createSchedules)
 // Admin.post('/schedule/add', )
 
 // delete
-Admin.delete('/route/delete', TokenMid.checkToken, AdminControl.deleteRoutes)
+Admin.delete('/route/delete/:id', TokenMid.checkToken, AdminControl.deleteRoutes)
 Admin.delete('/agent/delete', TokenMid.checkToken, AdminControl.deleteAgent)
 Admin.delete('/bus/delete', TokenMid.checkToken, AgenControl.deleteBuss)
 Admin.delete('/schedule/delete', TokenMid.checkToken, AdminControl.deleteSchedule)
 
 // update
-Admin.patch('/route/update', TokenMid.checkToken, AdminControl.updateRoutes)
+Admin.patch('/route/update/:id', TokenMid.checkToken, AdminControl.updateRoutes)
 Admin.patch('/agent/update', TokenMid.checkToken, AdminControl.updateAgent)
 Admin.patch('/bus/update', TokenMid.checkToken, AdminControl.updateBus)
 Admin.patch('/schedule/update', TokenMid.checkToken, AdminControl.updateSchedule)

@@ -1,8 +1,12 @@
 // third party module
 const express = require('express')
 const app = express()
+var cors = require('cors')
 require('dotenv').config()
 const bodyParser = require('body-parser')
+
+// activate cors
+app.use(cors())
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: false })) // for x-www-urlencoded

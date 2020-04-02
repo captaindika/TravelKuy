@@ -1,7 +1,8 @@
 // third party module
 const express = require('express')
+const cors = require('cors')
 const app = express()
-var cors = require('cors')
+
 require('dotenv').config()
 const bodyParser = require('body-parser')
 

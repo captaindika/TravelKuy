@@ -18,6 +18,7 @@ module.exports = {
     const table = 'users'
     return new Promise(function (resolve, reject) {
       const query = `SELECT * FROM ${table} WHERE username = '${username}'`
+      console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)

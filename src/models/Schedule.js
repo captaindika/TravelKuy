@@ -51,18 +51,19 @@ module.exports = {
       })
     })
   },
-  getAllSchedules: function (conditions = {}) {
-    let { page, perPage, sort, search } = conditions
-    page = page || 1
-    perPage = perPage || 5
-    sort = sort || { key: 'id', value: 1 } // value => 0 untuk descending, 1 ascending
-    search = search || { key: 'name', value: '' }
+  getAllSchedules: function (conditions) {
+    const { page, perPage, sort, search } = conditions
+    // page = page || 1
+    // perPage = perPage || 5
+    // sort = sort || { key: 'id', value: 1 } // value => 0 untuk descending, 1 ascending
+    // search = search || { key: 'name', value: '' }
     const table = 'schedules'
     return new Promise(function (resolve, reject) {
       const sql = `SELECT * FROM ${table}
                   WHERE ${search.key} LIKE '${search.value}%'
                   ORDER BY ${sort.key} ${sort.value ? 'ASC' : 'DESC'} 
                    LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
+      console.log(sql)
       db.query(sql, function (err, results, fields) {
         if (err) {
           reject(err)
@@ -138,6 +139,21 @@ module.exports = {
           } else {
             resolve(false)
           }
+        }
+      })
+    })
+  },
+  getScheduleJoin: function () {
+    const query = `SELECT routes.start, routes.end, busses.bus_seat, busses.car_name, schedules.price, schedules.departure_time, schedules.arrive_time, schedules.departure_date
+                    FROM schedules
+                    JOIN routes ON schedules.id_route = routes.id
+                    JOIN busses ON schedules.id_bus = busses.id`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results)
         }
       })
     })

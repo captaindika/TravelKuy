@@ -1,12 +1,12 @@
 const db = require('../utils/db')
 
 module.exports = {
-  getAllRoutes: function (conditions = {}) {
-    let { page, perPage, sort, search } = conditions
-    page = page || 1
-    perPage = perPage || 5
-    sort = sort || { key: 'id', value: 1 } // 1 for value asc or des
-    search = search || { key: 'end', value: '' }
+  getAllRoutes: function (conditions) {
+    const { page, perPage, sort, search } = conditions
+    // page = page || 1
+    // perPage = perPage || 5
+    // sort = sort || { key: 'id', value: 1 } // 1 for value asc or des
+    // search = search || { key: 'end', value: '' }
     const table = 'routes'
     return new Promise(function (resolve, reject) {
       const sql = `SELECT * FROM ${table}

@@ -231,11 +231,11 @@ module.exports = {
 
     let key = search && Object.keys(search)[0]
     let value = search && Object.values(search)[0]
-    search = (search && { key, value }) || { key: 'id', value: '' }
+    search = (search && { key, value }) || { key: 'car_name', value: '' }
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    search = (sort && { key, value }) || { key: 'id', value: '' }
+    sort = (sort && { key, value }) || { key: 'id', value: 0 }
     const conditions = { page, perPage: limit, search, sort }
     if (req.user.roleId !== 1) {
       const data = {
@@ -264,11 +264,11 @@ module.exports = {
 
     let key = search && Object.keys(search)[0]
     let value = search && Object.values(search)[0]
-    search = (search && { key, value }) || { key: 'id', value: '' }
+    search = (search && { key, value }) || { key: 'name', value: '' }
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    search = (sort && { key, value }) || { key: 'id', value: '' }
+    sort = (sort && { key, value }) || { key: 'id', value: '' }
     const conditions = { page, perPage: limit, search, sort }
     if (req.user.roleId !== 1) {
       const data = {
@@ -297,11 +297,11 @@ module.exports = {
 
     let key = search && Object.keys(search)[0]
     let value = search && Object.values(search)[0]
-    search = (search && { key, value }) || { key: 'id', value: '' }
+    search = (search && { key, value }) || { key: 'start', value: '' }
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    search = (sort && { key, value }) || { key: 'id', value: '' }
+    sort = (sort && { key, value }) || { key: 'id', value: '' }
     const conditions = { page, perPage: limit, search, sort }
     if (req.user.roleId !== 1) {
       const data = {
@@ -330,11 +330,11 @@ module.exports = {
 
     let key = search && Object.keys(search)[0]
     let value = search && Object.values(search)[0]
-    search = (search && { key, value }) || { key: 'id', value: '' }
+    search = (search && { key, value }) || { key: 'price', value: '' }
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    search = (sort && { key, value }) || { key: 'price', value: '' }
+    sort = (sort && { key, value }) || { key: 'id', value: 1 }
     const conditions = { page, perPage: limit, search, sort }
 
     const results = await ScheduleModel.getAllSchedules(conditions)
@@ -361,7 +361,7 @@ module.exports = {
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    search = (sort && { key, value }) || { key: 'id', value: '' }
+    sort = (sort && { key, value }) || { key: 'id', value: '' }
     const conditions = { page, perPage: limit, search, sort }
     if (req.user.roleId !== 1) {
       const data = {
@@ -385,10 +385,28 @@ module.exports = {
   },
   readTransactionDetail: async function (req, res) {
     if (req.user.roleId === 1) {
-      const results = await TransactionModel.getTransactionDetail()
+      let { page, limit, search, sort } = req.query
+      page = parseInt(page) || 1
+      limit = parseInt(limit) || 5
+
+      let key = search && Object.keys(search)[0]
+      let value = search && Object.values(search)[0]
+      search = (search && { key, value }) || { key: 'user_details.name', value: '' }
+
+      key = sort && Object.keys(sort)[0]
+      value = sort && Object.values(sort)[0]
+      sort = (sort && { key, value }) || { key: 'transactions.id', value: 0 }
+      const conditions = { page, perPage: limit, search, sort }
+      const results = await TransactionModel.getTransactionDetail(conditions)
+      conditions.totalData = await TransactionModel.getTotalTransaction(conditions)
+      conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
+      delete conditions.search
+      delete conditions.sort
+      delete conditions.limit
       const data = {
         success: true,
-        data: results
+        data: results,
+        pageInfo: conditions
       }
       res.send(data)
     } else {
@@ -652,6 +670,24 @@ module.exports = {
         const data = {
           success: false,
           msg: 'Id Schedule cant be found'
+        }
+        res.send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'U cant access this feature'
+      }
+      res.send(data)
+    }
+  },
+  getTotalBus: async function (req, res) {
+    if (req.user.roleId === 1) {
+      const total = await BussModel.getTotalBusses()
+      if (total) {
+        const data = {
+          success: true,
+          msg: total
         }
         res.send(data)
       }

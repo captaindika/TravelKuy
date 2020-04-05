@@ -53,6 +53,7 @@ module.exports = {
     return new Promise(function (resolve, reject) {
       const table = 'busses'
       const query = `DELETE FROM ${table} WHERE id=${id}`
+      console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)
@@ -66,7 +67,7 @@ module.exports = {
       })
     })
   },
-  getAllBusses: function (conditions = {}) {
+  getAllBusses: function (conditions) {
     let { page, perPage, sort, search } = conditions
     page = page || 1
     perPage = perPage || 5
@@ -76,8 +77,9 @@ module.exports = {
     return new Promise(function (resolve, reject) {
       const sql = `SELECT * FROM ${table}
                   WHERE ${search.key} LIKE '${search.value}%'
-                  ORDER BY ${sort.key} ${sort.value ? 'ASC' : 'DESC'} 
+                  ORDER BY ${sort.key} ${sort.value ? 'DESC' : 'ASC'} 
                    LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
+      console.log(sql)
       db.query(sql, function (err, results, fields) {
         if (err) {
           reject(err)

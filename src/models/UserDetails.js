@@ -37,12 +37,12 @@ module.exports = {
       })
     })
   },
-  getAllUserDetail: function (conditions = {}) {
-    let { page, perPage, sort, search } = conditions
-    page = page || 1
-    perPage = perPage || 5
-    sort = sort || { key: 'id', value: 1 }
-    search = search || { key: 'username', value: '' }
+  getAllUserDetail: function (conditions) {
+    const { page, perPage, sort, search } = conditions
+    // page = page || 1
+    // perPage = perPage || 5
+    // sort = sort || { key: 'id', value: 1 }
+    // search = search || { key: 'username', value: '' }
     const table = 'user_details'
     return new Promise(function (resolve, reject) {
       const query = `SELECT * FROM ${table}

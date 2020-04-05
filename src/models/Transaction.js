@@ -152,14 +152,23 @@ module.exports = {
       })
     })
   },
-  getTransactionDetail: function () {
+  getTransactionDetail: function (conditions) {
+    const { page, perPage, sort, search } = conditions
+    // page = page || 1
+    // perPage = perPage || 5
+    // sort = sort || { key: 'transactions.id', value: 0 } // value => 0 untuk ascending, 1 descending
+    // search = search || { key: 'user_details.name', value: '' }
     const query = `SELECT user_details.name, routes.start, routes.end, busses.car_name, schedules.price, schedules.departure_time, schedules.arrive_time, schedules.departure_date
-    FROM transactions
-    JOIN users ON transactions.id_user = users.id
-    JOIN user_details ON user_details.id_user = users.id
-    JOIN schedules ON transactions.id_schedule = schedules.id
-    JOIN busses ON schedules.id_bus = busses.id
-    JOIN routes ON schedules.id_route = routes.id`
+                    FROM transactions
+                    INNER JOIN users ON transactions.id_user = users.id
+                    INNER JOIN user_details ON user_details.id_user = users.id
+                    INNER JOIN schedules ON transactions.id_schedule = schedules.id
+                    INNER JOIN busses ON schedules.id_bus = busses.id
+                    INNER JOIN routes ON schedules.id_route = routes.id
+                    WHERE ${search.key} LIKE '${search.value}%'
+                    ORDER BY ${sort.key} ${sort.value ? 'ASC' : 'DESC'} 
+                    LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
+    console.log(query)
     return new Promise(function (resolve, reject) {
       console.log(query)
       db.query(query, function (err, results, fields) {

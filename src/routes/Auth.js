@@ -15,7 +15,7 @@ Auth.post('/picture', upload.single('picture'), AuthController.register)
 Auth.post('/register', AuthController.register)
 Auth.get('/activate', AuthController.verify)
 Auth.post('/login', AuthController.login)
-Auth.post('/forgot-password', AuthController.forgetPass)
+Auth.post('/forgot-password/:username', AuthController.forgetPass)
 Auth.get('/user', AuthToken.checkToken, function (req, res) {
   res.send(req.user)
 })

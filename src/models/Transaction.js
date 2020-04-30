@@ -134,13 +134,17 @@ module.exports = {
       })
     })
   },
-  getTransactionByUser: function (idUser) {
-    const query = `select user_details.name, routes.start, routes.end, schedules.price, 
-    busses.car_name, schedules.departure_date, schedules.departure_time, schedules.arrive_time
-     from transactions, schedules, busses, user_details, routes 
-     where transactions.id_schedule = schedules.id and schedules.id_bus = busses.id 
-     and transactions.id_user = user_details.id_user and schedules.id_route = routes.id 
-     AND transactions.id_user = ${idUser}`
+  getTransactionByUser: function (idUser, conditions) {
+    const { page, perPage, sort, search } = conditions
+    const query = `select user_details.name , routes.start, routes.end, schedules.price, busses.car_name, schedules.departure_date, schedules.departure_time, schedules.arrive_time
+    from ((((transactions 
+    INNER JOIN schedules ON schedules.id = transactions.id_schedule)
+    INNER JOIN routes ON routes.id = schedules.id_route)
+    INNER JOIN busses ON busses.id = schedules.id_bus)
+    INNER JOIN user_details ON transactions.id_user = user_details.id_user)
+    WHERE transactions.id_user = ${idUser} and ${search.key} LIKE '%${search.value}%'
+    ORDER BY ${sort.key} ${parseInt(sort.value) ?  'ASC' : 'DESC'}
+    LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
     console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
@@ -148,6 +152,19 @@ module.exports = {
           reject(err)
         } else {
           resolve(results)
+        }
+      })
+    })
+  },
+  getTotalTransactionByUser: function (idUser) {
+    const table = 'transactions'
+    const query = `SELECT COUNT (*) AS total FROM ${table} WHERE id_user=${idUser}`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results[0].total)
         }
       })
     })
@@ -165,7 +182,7 @@ module.exports = {
                     INNER JOIN schedules ON transactions.id_schedule = schedules.id
                     INNER JOIN busses ON schedules.id_bus = busses.id
                     INNER JOIN routes ON schedules.id_route = routes.id
-                    WHERE ${search.key} LIKE '${search.value}%'
+                    WHERE ${search.key} LIKE %'${search.value}%'
                     ORDER BY ${sort.key} ${sort.value ? 'ASC' : 'DESC'} 
                     LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
     console.log(query)

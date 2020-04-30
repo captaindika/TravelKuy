@@ -228,11 +228,23 @@ module.exports = {
     console.log(info.bus_seat)
   },
   getTransactionbyUser: async function (req, res) {
-    const info = await TransactionModel.getTransactionByUser(req.user.id)
-    console.log(info)
+    let { page, limit, search, sort } = req.query
+    page = parseInt(page) || 1
+    limit = parseInt(limit) || 5
+    search = (search && { key: search.key, value: search.value }) || { key: 'busses.car_name', value: '' }
+    sort = (sort && { key: sort.key, value: sort.value }) || { key: 'schedules.price', value: 1 }
+    const conditions = { page, perPage: limit, search, sort }
+    const info = await TransactionModel.getTransactionByUser(req.user.id, conditions)
+    conditions.total = await TransactionModel.getTotalTransactionByUser(req.user.id)
+    conditions.totalPage = Math.ceil(conditions.total / conditions.perPage)
+    delete conditions.search
+    delete conditions.sort
+    delete conditions.limit
+    // console.log(info)
     const data = {
       success: true,
-      info
+      info,
+      pageInfo: conditions
     }
     res.send(data)
   }

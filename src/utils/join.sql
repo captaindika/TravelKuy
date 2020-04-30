@@ -28,3 +28,14 @@ JOIN schedules ON transactions.id_schedule = schedules.id
 JOIN busses ON schedules.id_bus = busses.id
 JOIN routes ON schedules.id_route = routes.id
 
+
+select user_details.name , routes.start, routes.end, schedules.price, busses.car_name, schedules.departure_date, schedules.departure_time, schedules.arrive_time
+from ((((transactions 
+INNER JOIN schedules ON schedules.id = transactions.id_schedule)
+INNER JOIN routes ON routes.id = schedules.id_route)
+INNER JOIN busses ON busses.id = schedules.id_bus)
+INNER JOIN user_details ON transactions.id_user = user_details.id_user)
+WHERE transactions.id_user = ${idUser} and WHERE ${search.key} LIKE `%${search.value}%`
+ORDER BY ${sort.key} ${sort.value ?  'ASC' : 'DESC'}
+LIMIT ${perPage} OFFSET ${(page - 1) * perPage}
+

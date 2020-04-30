@@ -5,6 +5,7 @@ module.exports = {
     const table = 'users'
     return new Promise(function (resolve, reject) {
       const query = `SELECT COUNT (*) AS total FROM ${table} WHERE username ='${username}'`
+      console.log(query)
       db.query(query, function (err, results, fields) {
         if (err) {
           reject(err)
@@ -151,5 +152,22 @@ module.exports = {
         })
       })
     }
+  },
+  deleteVerCode: function(username) {
+    const table = 'users'
+    const query = `UPDATE ${table} SET verification_code = NULL WHERE username = '${username}'`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function(err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(true)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
   }
 }

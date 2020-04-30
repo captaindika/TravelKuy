@@ -55,6 +55,7 @@ module.exports = {
         success: true,
         msg: 'User activated succesfully'
       }
+      await AuthModel.deleteVerCode(username)
       res.send(data)
     } else {
       const data = {
@@ -112,7 +113,7 @@ module.exports = {
     }
   },
   forgetPass: async function (req, res) {
-    const { username } = req.body
+    const { username } = req.params
     const { code } = req.query
     console.log(code)
     if (!code) {
@@ -151,6 +152,7 @@ module.exports = {
             success: true,
             msg: 'Your password has been reset'
           }
+          await AuthModel.deleteVerCode(username)
           res.send(data)
         } else {
           const data = {

@@ -94,14 +94,9 @@ module.exports = {
     page = parseInt(page) || 1
     limit = parseInt(limit) || 5
 
-    let key = search && Object.keys(search)[0]
-    let value = search && Object.values(search)[0]
-    search = (search && { key, value }) || { key: 'id', value: '' }
-
-    key = sort && Object.keys(sort)[0]
-    value = sort && Object.values(sort)[0]
-    search = (sort && { key, value }) || { key: 'id', value: '' }
-    const conditions = { page, perPage: limit, search, sort }
+    search = (search && { key: search.key, value: search.value }) || { key: 'name', value: '' }
+    sort = (sort && { key:sort.key, value: sort.value }) || { key: 'id', value: 1 }
+  
     if (req.user.roleId !== 1) {
       const data = {
         success: false,
@@ -109,8 +104,10 @@ module.exports = {
       }
       res.send(data)
     }
+    const conditions = { page, perPage: limit, search, sort }
     const results = await AgentModel.getAllAgents(conditions)
     conditions.totalData = await AgentModel.getTotalAgents(conditions)
+    console.log(conditions.totalData, conditions.perPage)
     conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)
     delete conditions.search
     delete conditions.sort
@@ -330,11 +327,11 @@ module.exports = {
 
     let key = search && Object.keys(search)[0]
     let value = search && Object.values(search)[0]
-    search = (search && { key, value }) || { key: 'price', value: '' }
+    search = (search && { key:search.key, value:search.value }) || { key: 'price', value: '' }
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    sort = (sort && { key, value }) || { key: 'id', value: 1 }
+    sort = (sort && { key:sort.key, value:sort.value }) || { key: 'id', value: 1 }
     const conditions = { page, perPage: limit, search, sort }
 
     const results = await ScheduleModel.getAllSchedules(conditions)

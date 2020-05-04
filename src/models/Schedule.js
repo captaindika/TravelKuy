@@ -80,7 +80,7 @@ module.exports = {
     search = search || { key: 'name', value: '' }
     const table = 'schedules'
     return new Promise(function (resolve, reject) {
-      const sql = `SELECT COUNT (*) AS total FROM ((${table} s
+      const sql = `SELECT COUNT (*) AS total FROM ((${table}
                   INNER JOIN routes  ON routes.id = schedules.id_route)
                   INNER JOIN busses  ON busses.id = schedules.id_bus)
                   WHERE ${search.key} LIKE '%${search.value}%'`

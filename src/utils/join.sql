@@ -39,3 +39,9 @@ WHERE transactions.id_user = ${idUser} and WHERE ${search.key} LIKE `%${search.v
 ORDER BY ${sort.key} ${sort.value ?  'ASC' : 'DESC'}
 LIMIT ${perPage} OFFSET ${(page - 1) * perPage}
 
+select schedules.id, schedules.price, schedules.departure_time, schedules.arrive_time, routes.start, routes.end, busses.bus_seat
+FROM ((schedules 
+INNER JOIN routes ON routes.id = schedules.id_route)
+INNER JOIN busses ON busses.id = schedules.id_bus)
+WHERE ${search.key} LIKE '%${search.value}%' ORDER BY ${sort.key} ${sort.value ? 'ASC' : 'DESC'}
+LIMIT ${perPage} OFFSET ${(page - 1) * perPage}

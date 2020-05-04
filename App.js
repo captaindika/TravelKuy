@@ -2,6 +2,13 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
+const redis = require("redis");
+const client = redis.createClient();
+
+// redis
+client.on("error", function(error) {
+  console.error(error);
+})
 
 require('dotenv').config()
 const bodyParser = require('body-parser')

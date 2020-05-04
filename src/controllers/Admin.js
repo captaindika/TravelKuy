@@ -324,16 +324,17 @@ module.exports = {
     let { page, limit, search, sort } = req.query
     page = parseInt(page) || 1
     limit = parseInt(limit) || 5
+    
 
     let key = search && Object.keys(search)[0]
     let value = search && Object.values(search)[0]
-    search = (search && { key:search.key, value:search.value }) || { key: 'price', value: '' }
+    search = (search && { key:search.key, value:search.value }) || { key: 'schedules.price', value: '' }
 
     key = sort && Object.keys(sort)[0]
     value = sort && Object.values(sort)[0]
-    sort = (sort && { key:sort.key, value:sort.value }) || { key: 'id', value: 1 }
+    sort = (sort && { key:sort.key, value:sort.value }) || { key: 'schedules.id', value: 1 }
     const conditions = { page, perPage: limit, search, sort }
-
+    console.log(typeof sort.value)
     const results = await ScheduleModel.getAllSchedules(conditions)
     conditions.totalData = await ScheduleModel.getTotalSchedules(conditions)
     conditions.totalPage = Math.ceil(conditions.totalData / conditions.perPage)

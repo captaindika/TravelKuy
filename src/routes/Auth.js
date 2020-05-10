@@ -16,8 +16,6 @@ Auth.post('/register', AuthController.register)
 Auth.get('/activate', AuthController.verify)
 Auth.post('/login', AuthController.login)
 Auth.post('/forgot-password/:username', AuthController.forgetPass)
-Auth.get('/user', AuthToken.checkToken, function (req, res) {
-  res.send(req.user)
-})
+Auth.get('/user', AuthToken.checkToken, AuthController.getUser)
 
 module.exports = Auth

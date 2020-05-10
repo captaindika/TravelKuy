@@ -156,20 +156,20 @@ module.exports = {
     }
   },
   createBusAdmin: async function (req, res) {
-    const { idUser, nameBuss, busSeat } = req.body
+    const { idAgent, nameBuss, busSeat } = req.body
     if (req.user.roleId === 1) {
-      const agent = await AgentModel.findAgentByIdUser(idUser)
+      const agent = await AgentModel.findAgentById(idAgent)
       if (agent) { // check if id is agent or not
-        await BussModel.CreateBus(agent.id, nameBuss, busSeat)
+        await BussModel.CreateBus(idAgent, nameBuss, busSeat)
         const data = {
           success: true,
-          msg: `Car ${nameBuss} created with id agent ${agent.id}`
+          msg: `Car ${nameBuss} created with id agent ${idAgent}`
         }
         res.send(data)
       } else {
         const data = {
           success: false,
-          msg: 'Your id is not agent, register it first'
+          msg: 'Id agent not found, register it first'
         }
         res.send(data)
       }
@@ -291,9 +291,11 @@ module.exports = {
     let { page, limit, search, sort } = req.query
     page = parseInt(page) || 1
     limit = parseInt(limit) || 5
+    console.log('search:', search)
 
     let key = search && Object.keys(search)[0]
-    let value = search && Object.values(search)[0]
+    let value = search && Object.values(search)
+    console.log('val',req.query)
     search = (search && { key, value }) || { key: 'start', value: '' }
 
     key = sort && Object.keys(sort)[0]
@@ -689,6 +691,22 @@ module.exports = {
         }
         res.send(data)
       }
+    } else {
+      const data = {
+        success: false,
+        msg: 'U cant access this feature'
+      }
+      res.send(data)
+    }
+  },
+  getBusForSchedule: async function (req, res) {
+    if (req.user.roleId === 1) {
+      const result = await BussModel.getBusForAddSchedule()
+      const data = {
+        success: true,
+        data: result
+      }
+      res.send(data)
     } else {
       const data = {
         success: false,

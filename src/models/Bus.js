@@ -3,6 +3,7 @@ module.exports = {
   CreateBus: function (idAgent, name, busSeat) {
     const table = 'busses'
     const query = `INSERT INTO ${table} (id_agent,car_name,bus_seat) VALUES (${idAgent}, '${name}', ${busSeat})`
+    console.log(query)
     return new Promise(function (resolve, reject) {
       db.query(query, function (err, results, fields) {
         if (err) {
@@ -77,7 +78,7 @@ module.exports = {
     return new Promise(function (resolve, reject) {
       const sql = `SELECT * FROM ${table}
                   WHERE ${search.key} LIKE '${search.value}%'
-                  ORDER BY ${sort.key} ${sort.value ? 'DESC' : 'ASC'} 
+                  ORDER BY ${sort.key} ${parseInt(sort.value) ? 'DESC' : 'ASC'} 
                    LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
       console.log(sql)
       db.query(sql, function (err, results, fields) {
@@ -151,6 +152,21 @@ module.exports = {
           } else {
             resolve(false)
           }
+        }
+      })
+    })
+  },
+  getBusForAddSchedule: function () {
+    const query = `SELECT b.id, b.id_agent, b.car_name, b.bus_seat
+                    FROM busses b
+                    LEFT OUTER JOIN schedules s ON s.id_bus = b.id
+                    WHERE s.id_bus IS NULL`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function( err, results, fields) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(results)
         }
       })
     })

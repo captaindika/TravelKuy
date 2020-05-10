@@ -102,6 +102,34 @@ module.exports = {
       res.send(data)
     }
   },
+  updateDetail: async function(req, res) {
+    const picture = (req.file && req.file.filename)
+    const { name, email, phone } = req.body
+    const id = req.user.id
+    const infoUser = await UserModel.updatePhoto(picture, id)
+    if (infoUser) {
+      const infoDetail = await UserdModel.updateUserDetailByIdUser(id, name, email, phone)
+      if (infoDetail) {
+        const data = {
+          success: true,
+          msg: 'user detail updated'
+        }
+        res.status(200).send(data)
+      } else {
+        const data = {
+          success: false,
+          msg: 'user detail cant updated'
+        }
+        res.status(200).send(data)
+      }
+    } else {
+      const data = {
+        success: false,
+        msg: 'id not found'
+      }
+      res.status(200).send(data)
+    }
+  },
   delete: async function (req, res) {
     const { id } = req.params
     const results = await UserModel.deleteUser(id)

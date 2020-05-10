@@ -23,6 +23,7 @@ Admin.get('/schedule-by-admin', TokenMid.checkToken, AdminControl.getScheduleAdm
 Admin.get('/transaction', TokenMid.checkToken, AdminControl.readTransaction)
 Admin.get('/transaction-detail', TokenMid.checkToken, AdminControl.readTransactionDetail)
 Admin.get('/detail', TokenMid.checkToken, UserdControl.getUserDetailByIdUser)
+Admin.get('/bus/outjoin', TokenMid.checkToken, AdminControl.getBusForSchedule)
 
 // create
 Admin.post('/agent/add', TokenMid.checkToken, AdminControl.createAgent)

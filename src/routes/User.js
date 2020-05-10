@@ -51,7 +51,7 @@ function filterPicture (req, res, next) {
 
 // User.post('/upload', filterPicture)
 
-User.patch('/update', filterPicture, AuthToken.checkToken, UserControl.update)
+User.patch('/update', filterPicture, AuthToken.checkToken, UserControl.updateDetail)
 User.post('/register', filterPicture, AuthController.register)
 
 User.post('/login', AuthController.login)

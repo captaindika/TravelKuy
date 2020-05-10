@@ -86,6 +86,23 @@ module.exports = {
       })
     })
   },
+  updatePhoto: function(picture, id) {
+    const table='users'
+    const query = `UPDATE ${table} SET picture = '${picture}' WHERE id = ${id}`
+    return new Promise(function (resolve, reject) {
+      db.query(query, function (err, results, fields ) {
+        if (err) {
+          reject(err)
+        } else {
+          if (results.affectedRows) {
+            resolve(results.affectedRows)
+          } else {
+            resolve(false)
+          }
+        }
+      })
+    })
+  },
   deleteUser: function (id) {
     const table = 'users'
     return new Promise(function (resolve, reject) {

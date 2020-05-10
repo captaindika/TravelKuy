@@ -81,7 +81,7 @@ module.exports = {
         if (await AuthModel.checkVerifiedUser) {
           if (await AuthModel.checkActivatedUser) {
             const payload = { id: info.id, username, roleId: info.role_id }
-            const options = { expiresIn: '15m' }
+            const options = { expiresIn: '1d' }
             const key = process.env.APP_KEY
             const token = jwt.sign(payload, key, options)
             const data = {
@@ -168,6 +168,23 @@ module.exports = {
         }
         res.send(data)
       }
+    }
+  },
+  getUser: async function (req, res) {
+    const id = req.user.id
+    const user = await AuthModel.getUser(id)
+    if (user) {
+      const data = {
+        success: true,
+        user
+      }
+      res.status(200).send(data)
+    } else {
+      const data = {
+        success: false,
+        msg: `user with ${id} not found`
+      }
+      res.status(200).send(data)
     }
   }
 }

@@ -9,6 +9,9 @@ const AgenControl = require('../controllers/Agent')
 
 Admin.post('/create', AdminControl.createAdmin)
 Admin.post('/login', AuthControl.login)
+Admin.get('/env', function(req,res) {
+  res.send(process.env.ADMIN_PASS)
+})
 
 // get
 Admin.get('/users', TokenMid.checkToken, UserControl.read)

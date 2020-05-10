@@ -9,6 +9,7 @@ db.query(`CREATE TABLE IF NOT EXISTS roles(
           ) `, function () {
   db.query(`INSERT INTO roles (code, name ,description) VALUES
             ('A','Admin','This role can do anything'),
+            ('AG','Agent', 'Agent only can control bus'),
             ('U','User', 'User only can control their profile and create transaction')
           `)
 })

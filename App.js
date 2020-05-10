@@ -26,11 +26,12 @@ const AdminRouter = require('./src/routes/Admin')
 const UserRouter = require('./src/routes/User')
 const AgentRouter = require('./src/routes/Agent')
 
+app.use('/file', express.static('files'))
 app.use('/auth', AuthRouter) // first register here
 app.use('/admin', AdminRouter)
 app.use('/user', UserRouter)
 app.use('/agent', AgentRouter)
-app.use('/file', express.static('files'))
+
 
 // create migration table
 app.get('/migrate', function(req, res) {

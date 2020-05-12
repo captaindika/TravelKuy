@@ -63,7 +63,7 @@ module.exports = {
                   FROM ((schedules
                   INNER JOIN routes ON routes.id = schedules.id_route)
                   INNER JOIN busses ON busses.id = schedules.id_bus)
-                  WHERE ${search.key} LIKE '%${search.value}%' ORDER BY ${sort.key} ${parseInt(sort.value) ? 'ASC' : 'DESC'}
+                  WHERE ${search.key} LIKE '${search.value}%' ORDER BY ${sort.key} ${parseInt(sort.value) ? 'ASC' : 'DESC'}
                   LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
       console.log(sql)
       db.query(sql, function (err, results, fields) {
